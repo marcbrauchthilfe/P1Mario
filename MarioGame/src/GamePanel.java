@@ -15,8 +15,8 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
     private Level level;
     private int currentLevelIndex = 0;
     private int score = 0;
-    private int lives = 3;
-    private State state = State.START;
+    private static int lives = 3;
+    private static State state = State.START;
 
     public GamePanel() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -169,6 +169,11 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
         } else if (state == State.LEVEL_COMPLETE) {
             drawCenteredString(g2, "LEVEL COMPLETE - Press ENTER to continue", getWidth(), getHeight());
         }
+    }
+
+    public static void  subLive(){
+        lives--;
+        if (lives <= 0) state = State.GAME_OVER;
     }
 
     private void drawCenteredString(Graphics2D g, String text, int w, int h) {

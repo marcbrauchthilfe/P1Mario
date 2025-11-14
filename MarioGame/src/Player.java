@@ -1,27 +1,27 @@
 import java.awt.*;
 
 public class Player {
-    private double x, y;
-    private double vx, vy;
     private final int w = 32, h = 48;
     private final Level level;
-    private boolean onGround = false;
-
     private final double GRAVITY = 0.6;
     private final double MOVE_SPEED = 3.2;
     private final double JUMP_SPEED = -12.5;
     private final double MAX_FALL = 14.0;
-
     private final double COYOTE_TIME = 0.12;
     private final double JUMP_BUFFER_TIME = 0.12;
-
+    private final double startX, startY;
+    private double x, y;
+    private double vx, vy;
+    private boolean onGround = false;
     private double coyoteTimer = 0.0;
     private double jumpBufferTimer = 0.0;
 
-    private final double startX, startY;
-
     public Player(double startX, double startY, Level level) {
-        this.x = startX; this.y = startY; this.startX = startX; this.startY = startY; this.level = level;
+        this.x = startX;
+        this.y = startY;
+        this.startX = startX;
+        this.startY = startY;
+        this.level = level;
     }
 
     public void update(double dt) {
@@ -71,13 +71,24 @@ public class Player {
         // --- Spielfeldbegrenzungen ---
         if (x < 0) x = 0;
         if (x + w > level.getWidth()) x = level.getWidth() - w;
-        if (y > level.getHeight() + 300) respawn();
+        if (y > level.getHeight() + 300) {
+            respawn();
+            GamePanel.subLive();
+        }
     }
 
 
-    public void moveLeft() { vx = -MOVE_SPEED; }
-    public void moveRight() { vx = MOVE_SPEED; }
-    public void stopHorizontal() { vx = 0; }
+    public void moveLeft() {
+        vx = -MOVE_SPEED;
+    }
+
+    public void moveRight() {
+        vx = MOVE_SPEED;
+    }
+
+    public void stopHorizontal() {
+        vx = 0;
+    }
 
     public void pressJump() {
         jumpBufferTimer = JUMP_BUFFER_TIME;
@@ -97,19 +108,32 @@ public class Player {
         onGround = false;
     }
 
-    public void bounceAfterStomp() { vy = JUMP_SPEED / 2; }
-
-    public void respawn() {
-        x = startX; y = startY; vx = 0; vy = 0;
+    public void bounceAfterStomp() {
+        vy = JUMP_SPEED / 2;
     }
 
-    public boolean isFalling() { return vy > 0; }
+    public void respawn() {
+        x = startX;
+        y = startY;
+        vx = 0;
+        vy = 0;
+    }
 
-    public Rectangle getBounds() { return new Rectangle((int)Math.round(x), (int)Math.round(y), w, h); }
+    public boolean isFalling() {
+        return vy > 0;
+    }
 
-    public int getY() { return (int)Math.round(y); }
+    public Rectangle getBounds() {
+        return new Rectangle((int) Math.round(x), (int) Math.round(y), w, h);
+    }
 
-    public int getX() { return (int)Math.round(x); }
+    public int getY() {
+        return (int) Math.round(y);
+    }
+
+    public int getX() {
+        return (int) Math.round(x);
+    }
 
     public void draw(Graphics2D g, int camX) {
         int drawX = getX() - camX;
