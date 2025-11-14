@@ -1,4 +1,7 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.File;
 
 public class Player {
     private final int w = 32, h = 48;
@@ -10,11 +13,16 @@ public class Player {
     private final double COYOTE_TIME = 0.12;
     private final double JUMP_BUFFER_TIME = 0.12;
     private final double startX, startY;
+
     private double x, y;
     private double vx, vy;
     private boolean onGround = false;
     private double coyoteTimer = 0.0;
     private double jumpBufferTimer = 0.0;
+
+    // ------- SPRITE -------
+    private BufferedImage sprite = null;
+    private boolean flipX = false;
 
     public Player(double startX, double startY, Level level) {
         this.x = startX;
@@ -22,6 +30,20 @@ public class Player {
         this.startX = startX;
         this.startY = startY;
         this.level = level;
+    }
+
+    // Setzt das Playerbild
+    public void setSprite(BufferedImage img) {
+        this.sprite = img;
+    }
+
+    // Bild direkt aus Datei laden
+    public void loadSprite(String path) {
+        try {
+            sprite = ImageIO.read(new File(path));
+        } catch (Exception e) {
+            System.err.println("Sprite konnte nicht geladen werden: " + path);
+        }
     }
 
     public void update(double dt) {
@@ -49,26 +71,26 @@ public class Player {
         for (Tile t : level.getSolidTiles()) {
             Rectangle tileRect = t.getRect();
             if (getBounds().intersects(tileRect)) {
-                if (vy > 0) { // fällt auf Boden
+                if (vy > 0) {
                     y = tileRect.y - h;
                     vy = 0;
                     onGround = true;
                     coyoteTimer = COYOTE_TIME;
-                } else if (vy < 0) { // stößt an Decke
+                } else if (vy < 0) {
                     y = tileRect.y + tileRect.height;
                     vy = 0;
                 }
             }
         }
 
-        // --- Sprung puffern ---
+        // --- Sprungpuffer ---
         if (jumpBufferTimer > 0 && (onGround || coyoteTimer > 0)) {
             doJump();
             jumpBufferTimer = 0;
             coyoteTimer = 0;
         }
 
-        // --- Spielfeldbegrenzungen ---
+        // --- Levelgrenzen ---
         if (x < 0) x = 0;
         if (x + w > level.getWidth()) x = level.getWidth() - w;
         if (y > level.getHeight() + 300) {
@@ -77,13 +99,15 @@ public class Player {
         }
     }
 
-
+    // -------- Bewegung ----------
     public void moveLeft() {
         vx = -MOVE_SPEED;
+        flipX = true;   // Sprite spiegeln
     }
 
     public void moveRight() {
         vx = MOVE_SPEED;
+        flipX = false;  // Normal
     }
 
     public void stopHorizontal() {
@@ -92,15 +116,10 @@ public class Player {
 
     public void pressJump() {
         jumpBufferTimer = JUMP_BUFFER_TIME;
-        // immediate jump if possible:
-        if (onGround || coyoteTimer > 0) {
-            // handled in update by buffer/coyote, but we can call direct if desired:
-            // doJump(); jumpBufferTimer = 0; coyoteTimer = 0;
-        }
     }
 
     public void releaseJump() {
-        if (vy < 0) vy *= 0.6; // variable jump height
+        if (vy < 0) vy *= 0.6;
     }
 
     private void doJump() {
@@ -123,6 +142,7 @@ public class Player {
         return vy > 0;
     }
 
+    // -------- Bounds / Position ----------
     public Rectangle getBounds() {
         return new Rectangle((int) Math.round(x), (int) Math.round(y), w, h);
     }
@@ -135,16 +155,33 @@ public class Player {
         return (int) Math.round(x);
     }
 
+    // -------- Draw ----------
     public void draw(Graphics2D g, int camX) {
         int drawX = getX() - camX;
         int drawY = getY();
-        // body
-        g.setColor(new Color(200, 30, 30));
-        g.fillRoundRect(drawX, drawY, w, h, 6, 6);
-        // face
-        g.setColor(Color.WHITE);
-        g.fillOval(drawX + 8, drawY + 8, 8, 8);
-        g.setColor(Color.BLACK);
-        g.fillOval(drawX + 10, drawY + 10, 3, 3);
+
+        if (sprite != null) {
+            // Sprite zeichnen (links/rechts gespiegelt)
+            if (!flipX) {
+                g.drawImage(sprite, drawX, drawY, w, h, null);
+            } else {
+                g.drawImage(
+                        sprite,
+                        drawX + w, drawY, drawX, drawY + h,   // gespiegeltes Ziel
+                        0, 0, sprite.getWidth(), sprite.getHeight(),
+                        null
+                );
+            }
+        } else {
+            // Fallback: alte Player-Zeichnung
+            g.setColor(new Color(200, 30, 30));
+            g.fillRoundRect(drawX, drawY, w, h, 6, 6);
+
+            g.setColor(Color.WHITE);
+            g.fillOval(drawX + 8, drawY + 8, 8, 8);
+
+            g.setColor(Color.BLACK);
+            g.fillOval(drawX + 10, drawY + 10, 3, 3);
+        }
     }
 }
