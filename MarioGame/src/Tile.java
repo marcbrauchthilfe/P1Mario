@@ -1,7 +1,10 @@
 import java.awt.*;
 
 public class Tile {
-    private int x, y, w, h;
+    private final int x;
+    private final int y;
+    private final int w;
+    private final int h;
 
     public Tile(int x, int y, int w, int h) {
         this.x = x;
@@ -21,8 +24,19 @@ public class Tile {
         return new Rectangle(x, y, w, h);
     }
 
-    public int getX() { return x; }
-    public int getY() { return y; }
-    public int getW() { return w; }
-    public int getH() { return h; }
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getW() {
+        return w;
+    }
+
+    public int getH() {
+        return h;
+    }
 }
