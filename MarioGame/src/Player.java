@@ -32,11 +32,6 @@ public class Player {
         this.level = level;
     }
 
-    // Setzt das Playerbild
-    public void setSprite(BufferedImage img) {
-        this.sprite = img;
-    }
-
     // Bild direkt aus Datei laden
     public void loadSprite(String path) {
         try {
