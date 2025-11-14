@@ -36,7 +36,7 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
     private void loadLevel(int index) {
         level = Level.createSampleLevel(index);
         player = new Player(50, 450 - 48, level); // start slightly above ground
-        player.loadSprite("MarioGame/res/test.jpeg");
+        player.loadSprite("res/test.jpeg");
         enemies = new ArrayList<>();
         for (int[] p : level.getEnemyPositions()) {
             enemies.add(new Enemy(p[0], p[1], level));
