@@ -166,12 +166,12 @@ public class Level {
         g.fillRect(endX - camX - 10, endY + TILE_SIZE - 20, 60, 20);
 
         g.setColor(new Color(200, 200, 200));
-        g.fillRect(endX - camX, endY - 150, 5, 150);
+        g.fillRect(endX - camX, endY + TILE_SIZE - 20 - 150, 5, 150);
 
         g.setColor(Color.RED);
-        g.fillRect(endX - camX + 5, endY - 150, 40, 25);
+        g.fillRect(endX - camX + 5, endY + TILE_SIZE - 20 - 150, 40, 25);
         g.setColor(Color.BLACK);
-        g.drawRect(endX - camX + 5, endY - 150, 40, 25);
+        g.drawRect(endX - camX + 5, endY + TILE_SIZE - 20 - 150, 40, 25);
     }
 
     public ArrayList<Tile> getSolidTiles() { return solidTiles; }
