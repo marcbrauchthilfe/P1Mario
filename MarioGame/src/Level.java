@@ -107,7 +107,7 @@ public class Level {
             tiles.add(new Tile(1600, 450, TILE_SIZE, TILE_SIZE));
 
             level.enemyPositions = new int[][] {
-                    {600, 500}, {1000, 500}, {1450, 500}, {1800, 500}
+                    {550, 500}, {1100, 500}, {1450, 500}, {1900, 500}
             };
 
             level.endX = 2400;
