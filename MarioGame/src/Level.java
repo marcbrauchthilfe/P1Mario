@@ -5,8 +5,8 @@ public class Level {
     public static final int TILE_SIZE = 50;
     public static final int NUM_LEVELS = 4;
 
-    private int width;
-    private int height;
+    private final int width;
+    private final int height;
     private ArrayList<Tile> solidTiles = new ArrayList<>();
     private int[][] enemyPositions;
     private int endX, endY;
@@ -46,9 +46,7 @@ public class Level {
                 tiles.add(new Tile(x * TILE_SIZE, groundY - (x - 38) * 10, TILE_SIZE, TILE_SIZE));
             }
 
-            level.enemyPositions = new int[][] {
-                    {700, 500}, {1100, 500}, {1500, 500}
-            };
+            level.enemyPositions = new int[][]{{700, 500}, {1100, 500}, {1500, 500}};
 
             level.endX = 2300;
             level.endY = groundY - TILE_SIZE;
@@ -73,9 +71,7 @@ public class Level {
             tiles.add(new Tile(1750, 400, TILE_SIZE, TILE_SIZE));
             tiles.add(new Tile(1900, 450, TILE_SIZE, TILE_SIZE));
 
-            level.enemyPositions = new int[][] {
-                    {500, 500}, {850, 500}, {1300, 500}, {1700, 500}
-            };
+            level.enemyPositions = new int[][]{{500, 500}, {850, 500}, {1300, 500}, {1700, 500}};
 
             level.endX = 2400;
             level.endY = groundY - TILE_SIZE;
@@ -106,9 +102,7 @@ public class Level {
             tiles.add(new Tile(1500, 400, TILE_SIZE, TILE_SIZE));
             tiles.add(new Tile(1600, 450, TILE_SIZE, TILE_SIZE));
 
-            level.enemyPositions = new int[][] {
-                    {550, 500}, {1100, 500}, {1450, 500}, {1900, 500}
-            };
+            level.enemyPositions = new int[][]{{550, 500}, {1100, 500}, {1450, 500}, {1900, 500}};
 
             level.endX = 2400;
             level.endY = groundY - TILE_SIZE;
@@ -133,9 +127,7 @@ public class Level {
                 tiles.add(new Tile(1800 + i * 50, groundY - i * 30, TILE_SIZE, TILE_SIZE));
             }
 
-            level.enemyPositions = new int[][] {
-                    {650, 500}, {1100, 500}, {1400, 500}, {1700, 500}, {2000, 500}
-            };
+            level.enemyPositions = new int[][]{{650, 500}, {1100, 500}, {1400, 500}, {1700, 500}, {2000, 500}};
 
             level.endX = 2450;
             level.endY = groundY - 150;
@@ -174,8 +166,19 @@ public class Level {
         g.drawRect(endX - camX + 5, endY + TILE_SIZE - 20 - 150, 40, 25);
     }
 
-    public ArrayList<Tile> getSolidTiles() { return solidTiles; }
-    public int[][] getEnemyPositions() { return enemyPositions; }
-    public int getWidth() { return width; }
-    public int getHeight() { return height; }
+    public ArrayList<Tile> getSolidTiles() {
+        return solidTiles;
+    }
+
+    public int[][] getEnemyPositions() {
+        return enemyPositions;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 }

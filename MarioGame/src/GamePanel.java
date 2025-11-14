@@ -6,17 +6,15 @@ import java.util.ArrayList;
 public class GamePanel extends JPanel implements java.awt.event.ActionListener {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
-
+    private static int lives = 3;
+    private static State state = State.START;
     private final Timer timer;
     private boolean left, right;
-
     private Player player;
     private ArrayList<Enemy> enemies;
     private Level level;
     private int currentLevelIndex = 0;
     private int score = 0;
-    private static int lives = 3;
-    private static State state = State.START;
 
     public GamePanel() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -27,6 +25,11 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
         setupKeyBindings();
 
         loadLevel(currentLevelIndex);
+    }
+
+    public static void subLive() {
+        lives--;
+        if (lives <= 0) state = State.GAME_OVER;
     }
 
     public void startGame() {
@@ -53,16 +56,32 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
         im.put(KeyStroke.getKeyStroke("released LEFT"), "left_released");
         im.put(KeyStroke.getKeyStroke("pressed A"), "left_pressed");
         im.put(KeyStroke.getKeyStroke("released A"), "left_released");
-        am.put("left_pressed", new AbstractAction() { public void actionPerformed(ActionEvent e) { left = true; }});
-        am.put("left_released", new AbstractAction() { public void actionPerformed(ActionEvent e) { left = false; }});
+        am.put("left_pressed", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                left = true;
+            }
+        });
+        am.put("left_released", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                left = false;
+            }
+        });
 
         // RIGHT / D
         im.put(KeyStroke.getKeyStroke("pressed RIGHT"), "right_pressed");
         im.put(KeyStroke.getKeyStroke("released RIGHT"), "right_released");
         im.put(KeyStroke.getKeyStroke("pressed D"), "right_pressed");
         im.put(KeyStroke.getKeyStroke("released D"), "right_released");
-        am.put("right_pressed", new AbstractAction() { public void actionPerformed(ActionEvent e) { right = true; }});
-        am.put("right_released", new AbstractAction() { public void actionPerformed(ActionEvent e) { right = false; }});
+        am.put("right_pressed", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                right = true;
+            }
+        });
+        am.put("right_released", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                right = false;
+            }
+        });
 
         // JUMP: SPACE / UP / W
         im.put(KeyStroke.getKeyStroke("pressed SPACE"), "jump_pressed");
@@ -71,8 +90,16 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
         im.put(KeyStroke.getKeyStroke("released SPACE"), "jump_released");
         im.put(KeyStroke.getKeyStroke("released UP"), "jump_released");
         im.put(KeyStroke.getKeyStroke("released W"), "jump_released");
-        am.put("jump_pressed", new AbstractAction() { public void actionPerformed(ActionEvent e) { if (player != null) player.pressJump(); }});
-        am.put("jump_released", new AbstractAction() { public void actionPerformed(ActionEvent e) { if (player != null) player.releaseJump(); }});
+        am.put("jump_pressed", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                if (player != null) player.pressJump();
+            }
+        });
+        am.put("jump_released", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                if (player != null) player.releaseJump();
+            }
+        });
 
         // ENTER: start / next
         im.put(KeyStroke.getKeyStroke("pressed ENTER"), "enter_pressed");
@@ -96,7 +123,11 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
         am.put("r_pressed", new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 if (state == State.GAME_OVER) {
-                    score = 0; lives = 3; currentLevelIndex = 0; loadLevel(currentLevelIndex); state = State.START;
+                    score = 0;
+                    lives = 3;
+                    currentLevelIndex = 0;
+                    loadLevel(currentLevelIndex);
+                    state = State.START;
                 }
             }
         });
@@ -172,11 +203,6 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
         }
     }
 
-    public static void  subLive(){
-        lives--;
-        if (lives <= 0) state = State.GAME_OVER;
-    }
-
     private void drawCenteredString(Graphics2D g, String text, int w, int h) {
         FontMetrics fm = g.getFontMetrics();
         int x = (w - fm.stringWidth(text)) / 2;
@@ -187,5 +213,5 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
         g.drawString(text, x, y);
     }
 
-    private enum State { START, RUNNING, GAME_OVER, LEVEL_COMPLETE }
+    private enum State {START, RUNNING, GAME_OVER, LEVEL_COMPLETE}
 }

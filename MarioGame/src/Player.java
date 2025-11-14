@@ -1,6 +1,6 @@
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 import java.io.File;
 
 public class Player {
@@ -165,12 +165,8 @@ public class Player {
             if (!flipX) {
                 g.drawImage(sprite, drawX, drawY, w, h, null);
             } else {
-                g.drawImage(
-                        sprite,
-                        drawX + w, drawY, drawX, drawY + h,   // gespiegeltes Ziel
-                        0, 0, sprite.getWidth(), sprite.getHeight(),
-                        null
-                );
+                g.drawImage(sprite, drawX + w, drawY, drawX, drawY + h,   // gespiegeltes Ziel
+                        0, 0, sprite.getWidth(), sprite.getHeight(), null);
             }
         } else {
             // Fallback: alte Player-Zeichnung
