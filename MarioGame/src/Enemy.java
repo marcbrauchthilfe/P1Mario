@@ -1,15 +1,25 @@
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Enemy {
     private final int w = 32, h = 32;
     private final Level level;
     private double x, y;
     private double vx = 1.2;
+    private BufferedImage sprite;
 
     public Enemy(double x, double y, Level level) {
         this.x = x;
         this.y = y;
         this.level = level;
+        try{
+            sprite = ImageIO.read(new File("res/enemy.png"));
+        } catch (IOException e) {
+            System.err.println("Enemy sprite loading failed.");
+        }
     }
 
     public void update() {
@@ -100,9 +110,13 @@ public class Enemy {
         int dx = (int) Math.round(x) - camX;
         int dy = (int) Math.round(y);
 
-        g.setColor(new Color(255, 140, 0));
-        g.fillOval(dx, dy, w, h);
-        g.setColor(Color.BLACK);
-        g.drawOval(dx, dy, w, h);
+        if (sprite != null) {
+            g.drawImage(sprite, dx, dy, w, h, null);
+        } else {
+            g.setColor(new Color(255, 140, 0));
+            g.fillOval(dx, dy, w, h);
+            g.setColor(Color.BLACK);
+            g.drawOval(dx, dy, w, h);
+        }
     }
 }
