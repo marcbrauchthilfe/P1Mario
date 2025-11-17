@@ -5,47 +5,50 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class Level {
-    public static final int TILE_SIZE = 50;
     public static final int NUM_LEVELS = 4;
+    private static final int BASE_TILE_SIZE = 32;
+    // TILE_SIZE wird korrekt mit dem Skalierungsfaktor multipliziert (z.B. 32 * 2 = 64)
+    public static final int TILE_SIZE = (int) (BASE_TILE_SIZE * Zoom.SCALE);
+    public static final int groundY = GamePanel.HEIGHT - TILE_SIZE;
+    // Annahme: PLAYER_HEIGHT ist in Player.java korrekt skaliert
+    private static final int PLAYER_HEIGHT = Player.PLAYER_HEIGHT;
     private static BufferedImage groundTexture;
     private static BufferedImage blockTexture;
     private static BufferedImage background;
+
+    // Ressourcen werden nur einmal beim Start geladen (sauberer)
+    static {
+        try {
+            groundTexture = ImageIO.read(new File("res/ground.png"));
+            blockTexture = ImageIO.read(new File("res/block.png"));
+            background = ImageIO.read(new File("res/background.png"));
+        } catch (Exception e) {
+            System.err.println("Fehler beim Laden der Level-Texturen.");
+        }
+    }
+
     private final int width;
     private final int height;
     private ArrayList<Tile> solidTiles = new ArrayList<>();
     private int[][] enemyPositions;
     private int endX, endY;
 
+    // Konstruktor ist jetzt nur für die Level-Dimensionen zuständig
     public Level(int width, int height) {
         this.width = width;
         this.height = height;
-
-        try {
-            groundTexture = ImageIO.read(new File("res/ground.png"));
-        } catch (Exception e) {
-            System.err.println("Ground texture loading failed.");
-        }
-
-        try {
-            blockTexture = ImageIO.read(new File("res/block.png"));
-        } catch (Exception e) {
-            System.err.println("Block texture loading failed.");
-        }
-        try {
-            background = ImageIO.read(new File("res/background.png"));
-        } catch (Exception e) {
-            System.err.println("Background texture loading failed.");
-        }
     }
 
     public static Level createSampleLevel(int index) {
-        Level level = new Level(2500, 600);
+        // Level-Dimensionen skalieren
+        Level level = new Level((int) (2500 * Zoom.SCALE), (int) (600 * Zoom.SCALE));
         ArrayList<Tile> tiles = new ArrayList<>();
-        int groundY = 550;
+
+        int spawnY = groundY - TILE_SIZE;
 
         // Grundboden mit kleinen Lücken
-        for (int x = 0; x < 50; x++) {
-            if (x % 8 == 4 && index > 0) continue; // kleine Lücken in höheren Levels
+        for (int x = 0; x < 60; x++) {
+            if (x % 8 == 4 && index > 0) continue;
             tiles.add(new Tile(x * TILE_SIZE, groundY, TILE_SIZE, TILE_SIZE, groundTexture));
         }
 
@@ -53,24 +56,25 @@ public class Level {
         // LEVEL 1 – einfaches Springen & Bewegung
         // -----------------------
         if (index == 0) {
-            tiles.add(new Tile(400, 500, TILE_SIZE, TILE_SIZE, blockTexture));
-            tiles.add(new Tile(500, 450, TILE_SIZE, TILE_SIZE, blockTexture));
-            tiles.add(new Tile(600, 400, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(8 * TILE_SIZE, groundY - TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(10 * TILE_SIZE, groundY - TILE_SIZE - PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(12 * TILE_SIZE, groundY - TILE_SIZE - 2 * PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
 
-            // neue Sektion 2 (nach 900px)
-            tiles.add(new Tile(950, 500, TILE_SIZE, TILE_SIZE, blockTexture));
-            tiles.add(new Tile(1050, 450, TILE_SIZE, TILE_SIZE, blockTexture));
-            tiles.add(new Tile(1150, 400, TILE_SIZE, TILE_SIZE, blockTexture));
-            tiles.add(new Tile(1250, 350, TILE_SIZE, TILE_SIZE, blockTexture));
+            // neue Sektion 2
+            tiles.add(new Tile(19 * TILE_SIZE, groundY - TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(21 * TILE_SIZE, groundY - TILE_SIZE - PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(23 * TILE_SIZE, groundY - TILE_SIZE - 2 * PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(25 * TILE_SIZE, groundY - TILE_SIZE - 3 * PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
 
-            // Endzone mit leichter Rampe
+            // Endzone mit leichter Rampe: 10 Pixel Steigung/Höhe skaliert
+            int rampStep = (int) (10 * Zoom.SCALE);
             for (int x = 38; x < 45; x++) {
-                tiles.add(new Tile(x * TILE_SIZE, groundY - (x - 38) * 10, TILE_SIZE, TILE_SIZE, groundTexture));
+                tiles.add(new Tile(x * TILE_SIZE, groundY - (x - 38) * rampStep - rampStep, TILE_SIZE, rampStep, blockTexture));
             }
 
-            level.enemyPositions = new int[][]{{700, 500}, {1100, 500}, {1500, 500}};
+            level.enemyPositions = new int[][]{{14 * TILE_SIZE, spawnY}, {22 * TILE_SIZE, spawnY}, {30 * TILE_SIZE, spawnY}};
 
-            level.endX = 2300;
+            level.endX = 48 * TILE_SIZE;
             level.endY = groundY - TILE_SIZE;
         }
 
@@ -78,24 +82,25 @@ public class Level {
         // LEVEL 2 – Doppelsprünge, Hindernisse, kleine Gruben
         // -----------------------
         else if (index == 1) {
-            tiles.add(new Tile(400, 500, TILE_SIZE, TILE_SIZE, blockTexture));
-            tiles.add(new Tile(500, 450, TILE_SIZE, TILE_SIZE, blockTexture));
-            tiles.add(new Tile(600, 400, TILE_SIZE, TILE_SIZE, blockTexture));
-            tiles.add(new Tile(750, 400, TILE_SIZE, TILE_SIZE, blockTexture));
-            tiles.add(new Tile(900, 350, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(8 * TILE_SIZE, groundY - TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(10 * TILE_SIZE, groundY - TILE_SIZE - PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(12 * TILE_SIZE, groundY - TILE_SIZE - 2 * PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(15 * TILE_SIZE, groundY - TILE_SIZE - 2 * PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(18 * TILE_SIZE, groundY - TILE_SIZE - 3 * PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
 
-            // zweite Hälfte mit erhöhten Plattformen
+            // zweite Hälfte mit erhöhten Plattformen: 50 Pixel Offset skaliert
+            int platformOffset = (int) (50 * Zoom.SCALE);
             for (int i = 0; i < 5; i++) {
-                tiles.add(new Tile(1200 + i * 70, 450 - (i % 2) * 50, TILE_SIZE, TILE_SIZE, blockTexture));
+                tiles.add(new Tile((int) (24 * TILE_SIZE + i * TILE_SIZE * 1.4), groundY - TILE_SIZE - PLAYER_HEIGHT - (i % 2) * platformOffset, TILE_SIZE, TILE_SIZE, blockTexture));
             }
 
-            tiles.add(new Tile(1650, 350, TILE_SIZE, TILE_SIZE, blockTexture));
-            tiles.add(new Tile(1750, 400, TILE_SIZE, TILE_SIZE, blockTexture));
-            tiles.add(new Tile(1900, 450, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(33 * TILE_SIZE, groundY - 2 * TILE_SIZE - 2 * PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(35 * TILE_SIZE, groundY - 2 * TILE_SIZE - PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(38 * TILE_SIZE, groundY - 2 * TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
 
-            level.enemyPositions = new int[][]{{500, 500}, {850, 500}, {1300, 500}, {1700, 500}};
+            level.enemyPositions = new int[][]{{10 * TILE_SIZE, spawnY}, {17 * TILE_SIZE, spawnY}, {26 * TILE_SIZE, spawnY}, {34 * TILE_SIZE, spawnY}};
 
-            level.endX = 2400;
+            level.endX = 48 * TILE_SIZE;
             level.endY = groundY - TILE_SIZE;
         }
 
@@ -103,30 +108,31 @@ public class Level {
         // LEVEL 3 – Gegnerpfade & anspruchsvollere Sprünge
         // -----------------------
         else if (index == 2) {
-            // erste Sektion
-            tiles.add(new Tile(400, 500, TILE_SIZE, TILE_SIZE, blockTexture));
-            tiles.add(new Tile(500, 450, TILE_SIZE, TILE_SIZE, blockTexture));
-            tiles.add(new Tile(600, 400, TILE_SIZE, TILE_SIZE, blockTexture));
+            // ... (Hier sind keine weiteren Pixel-Offsets zu skalieren, da nur TILE_SIZE und PLAYER_HEIGHT verwendet werden, die bereits skaliert sind)
+
+            tiles.add(new Tile(8 * TILE_SIZE, groundY - TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(10 * TILE_SIZE, groundY - TILE_SIZE - PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(12 * TILE_SIZE, groundY - TILE_SIZE - 2 * PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
 
             // tiefe Lücke + Plattform darüber
             for (int x = 13; x < 17; x++) {
                 int finalX = x;
                 tiles.removeIf(t -> t.getX() / TILE_SIZE == finalX);
             }
-            tiles.add(new Tile(700, 350, TILE_SIZE, TILE_SIZE, blockTexture));
-            tiles.add(new Tile(800, 300, TILE_SIZE, TILE_SIZE, blockTexture));
-            tiles.add(new Tile(900, 350, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(14 * TILE_SIZE, groundY - TILE_SIZE - 3 * PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(16 * TILE_SIZE, groundY - TILE_SIZE - 4 * PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(18 * TILE_SIZE, groundY - TILE_SIZE - 3 * PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
 
             // zweite Sektion – gestaffelte Höhen
-            tiles.add(new Tile(1200, 450, TILE_SIZE, TILE_SIZE, blockTexture));
-            tiles.add(new Tile(1300, 400, TILE_SIZE, TILE_SIZE, blockTexture));
-            tiles.add(new Tile(1400, 350, TILE_SIZE, TILE_SIZE, blockTexture));
-            tiles.add(new Tile(1500, 400, TILE_SIZE, TILE_SIZE, blockTexture));
-            tiles.add(new Tile(1600, 450, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(24 * TILE_SIZE, groundY - TILE_SIZE - PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(26 * TILE_SIZE, groundY - TILE_SIZE - 2 * PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(28 * TILE_SIZE, groundY - TILE_SIZE - 3 * PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(30 * TILE_SIZE, groundY - TILE_SIZE - 2 * PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(32 * TILE_SIZE, groundY - TILE_SIZE - PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
 
-            level.enemyPositions = new int[][]{{550, 500}, {1100, 500}, {1450, 500}, {1900, 500}};
+            level.enemyPositions = new int[][]{{11 * TILE_SIZE, spawnY}, {22 * TILE_SIZE, spawnY}, {29 * TILE_SIZE, spawnY}, {38 * TILE_SIZE, spawnY}};
 
-            level.endX = 2400;
+            level.endX = 48 * TILE_SIZE;
             level.endY = groundY - TILE_SIZE;
         }
 
@@ -134,25 +140,26 @@ public class Level {
         // LEVEL 4 – Finale: mehr Vertikalität & lange Sprungpassagen
         // -----------------------
         else if (index == 3) {
-            tiles.add(new Tile(400, 500, TILE_SIZE, TILE_SIZE, blockTexture));
-            tiles.add(new Tile(500, 450, TILE_SIZE, TILE_SIZE, blockTexture));
-            tiles.add(new Tile(600, 400, TILE_SIZE, TILE_SIZE, blockTexture));
-            tiles.add(new Tile(750, 350, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(8 * TILE_SIZE, groundY - TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(10 * TILE_SIZE, groundY - TILE_SIZE - PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(12 * TILE_SIZE, groundY - TILE_SIZE - 2 * PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(15 * TILE_SIZE, groundY - TILE_SIZE - 3 * PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
 
-            // mittlere Plattform-Linie
+            // mittlere Plattform-Linie: 50 Pixel Offset skaliert
+            int platformOffset = (int) (50 * Zoom.SCALE);
             for (int i = 0; i < 7; i++) {
-                tiles.add(new Tile(1000 + i * 100, 400 - (i % 2) * 50, TILE_SIZE, TILE_SIZE, blockTexture));
+                tiles.add(new Tile(20 * TILE_SIZE + i * 2 * TILE_SIZE, groundY - TILE_SIZE - 2 * PLAYER_HEIGHT - (i % 2) * platformOffset, TILE_SIZE, TILE_SIZE, blockTexture));
             }
 
-            // finale Rampe hoch zur Flagge
+            // finale Rampe hoch zur Flagge: TILE_SIZE ist bereits skaliert, hier keine weitere Skalierung nötig
             for (int i = 0; i < 6; i++) {
-                tiles.add(new Tile(1800 + i * 50, groundY - i * 30, TILE_SIZE, TILE_SIZE, blockTexture));
+                tiles.add(new Tile(37 * TILE_SIZE + i * TILE_SIZE, (int) (groundY - TILE_SIZE - i * 0.5 * TILE_SIZE), TILE_SIZE, TILE_SIZE, blockTexture));
             }
 
-            level.enemyPositions = new int[][]{{650, 500}, {1100, 500}, {1400, 500}, {1700, 500}, {2000, 500}};
+            level.enemyPositions = new int[][]{{13 * TILE_SIZE, spawnY}, {22 * TILE_SIZE, spawnY}, {28 * TILE_SIZE, spawnY}, {34 * TILE_SIZE, spawnY}, {40 * TILE_SIZE, spawnY}};
 
-            level.endX = 2450;
-            level.endY = groundY - 150;
+            level.endX = 49 * TILE_SIZE;
+            level.endY = groundY - 3 * TILE_SIZE;
         }
 
         level.solidTiles = tiles;
@@ -160,17 +167,22 @@ public class Level {
     }
 
     public boolean isEndReached(Player p) {
-        Rectangle flagRect = new Rectangle(endX, endY - 150, 40, 200);
+        // Flaggen-Hitbox skaliert
+        Rectangle flagRect = new Rectangle(endX, (int) (endY - (150 * Zoom.SCALE)), (int) (40 * Zoom.SCALE), (int) (200 * Zoom.SCALE));
         return p.getBounds().intersects(flagRect);
     }
 
     public void draw(Graphics2D g, int camX) {
-        // Himmel
+        // Hintergrund (Parallax-Effekt und Hintergrund-Wiederholung)
         if (background != null) {
-            // Hintergrund wiederholen oder strecken
-            for (int x = 0; x < width; x += background.getWidth()) {
-                g.drawImage(background, x - camX / 2, 0, null);
-                // camX/2 für Parallax-Effekt
+            // Skalierte Breite und Höhe des Hintergrundbildes
+            int bgWidth = (int) (background.getWidth() * Zoom.SCALE);
+            int bgHeight = (int) (background.getHeight() * Zoom.SCALE);
+
+            // Zeichne nur die notwendigen Kacheln des Hintergrunds im sichtbaren Bereich
+            int startX = (camX / 2);
+            for (int x = -startX % bgWidth; x < GamePanel.WIDTH; x += bgWidth) {
+                g.drawImage(background, startX + x, 0, bgWidth, bgHeight, null);
             }
         } else {
             g.setColor(new Color(135, 206, 250));
@@ -180,27 +192,31 @@ public class Level {
 
         // Boden
         for (Tile t : solidTiles) {
-            if (groundTexture != null) {
-                t.draw(g, camX);
-                //g.drawImage(groundTexture, t.getX() - camX, t.getY(), t.getW(), t.getH(), null);
-            } else {
-                // Fallback falls kein Bild existiert
-                g.setColor(new Color(80, 80, 80));
-                g.fillRect(t.getX() - camX, t.getY(), t.getW(), t.getH());
-            }
+            t.draw(g, camX);
         }
 
-        // Flagge
+        // Flagge: Skalieren aller Dimensionen
+        int flagOffsetX = endX - camX;
+        int poleBaseWidth = (int) (30 * Zoom.SCALE);
+        int poleBaseHeight = (int) (10 * Zoom.SCALE);
+        int poleMastWidth = (int) (5 * Zoom.SCALE);
+        int poleMastHeight = (int) (100 * Zoom.SCALE);
+        int flagWidth = (int) (20 * Zoom.SCALE);
+        int flagHeight = (int) (15 * Zoom.SCALE);
+
+        // Basis
         g.setColor(new Color(50, 50, 50));
-        g.fillRect(endX - camX - 10, endY + TILE_SIZE - 20, 60, 20);
+        g.fillRect((int) (flagOffsetX - (10 * Zoom.SCALE)), endY + TILE_SIZE - poleBaseHeight, poleBaseWidth, poleBaseHeight);
 
+        // Mast
         g.setColor(new Color(200, 200, 200));
-        g.fillRect(endX - camX, endY + TILE_SIZE - 20 - 150, 5, 150);
+        g.fillRect((int) (flagOffsetX + (3 * Zoom.SCALE)), endY + TILE_SIZE - poleBaseHeight - poleMastHeight, poleMastWidth, poleMastHeight);
 
+        // Flagge
         g.setColor(Color.RED);
-        g.fillRect(endX - camX + 5, endY + TILE_SIZE - 20 - 150, 40, 25);
+        g.fillRect((int) (flagOffsetX + (7 * Zoom.SCALE)), endY + TILE_SIZE - poleBaseHeight - poleMastHeight, flagWidth, flagHeight);
         g.setColor(Color.BLACK);
-        g.drawRect(endX - camX + 5, endY + TILE_SIZE - 20 - 150, 40, 25);
+        g.drawRect((int) (flagOffsetX + (7 * Zoom.SCALE)), endY + TILE_SIZE - poleBaseHeight - poleMastHeight, flagWidth, flagHeight);
     }
 
     public ArrayList<Tile> getSolidTiles() {

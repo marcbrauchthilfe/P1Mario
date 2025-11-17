@@ -4,12 +4,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class Player {
-    private final int w = 32, h = 48;
+    public static final int PLAYER_WIDTH = (int) (32 * Zoom.SCALE);
+    public static final int PLAYER_HEIGHT = (int) (48 * Zoom.SCALE);
     private final Level level;
-    private final double GRAVITY = 0.6;
-    private final double MOVE_SPEED = 3.2;
-    private final double JUMP_SPEED = -12.5;
-    private final double MAX_FALL = 14.0;
+    private final double GRAVITY = 0.6 * Zoom.SCALE;
+    private final double MOVE_SPEED = 2.5 * Zoom.SCALE;
+    private final double JUMP_SPEED = -11 * Zoom.SCALE;
+    private final double MAX_FALL = 14.0 * Zoom.SCALE;
     private final double COYOTE_TIME = 0.12;
     private final double JUMP_BUFFER_TIME = 0.12;
     private final double startX, startY;
@@ -45,15 +46,15 @@ public class Player {
         if (coyoteTimer > 0) coyoteTimer -= dt;
         if (jumpBufferTimer > 0) jumpBufferTimer -= dt;
 
-        vy += GRAVITY;
+        vy += GRAVITY * dt * 60;
         if (vy > MAX_FALL) vy = MAX_FALL;
 
         // --- horizontale Bewegung ---
-        x += vx;
+        x += vx * dt * 60;
         Rectangle hb = getBounds();
         for (Tile t : level.getSolidTiles()) {
             if (hb.intersects(t.getRect())) {
-                if (vx > 0) x = t.getX() - w;
+                if (vx > 0) x = t.getX() - PLAYER_WIDTH;
                 else if (vx < 0) x = t.getX() + t.getW();
                 vx = 0;
                 hb = getBounds();
@@ -61,13 +62,13 @@ public class Player {
         }
 
         // --- vertikale Bewegung ---
-        y += vy;
+        y += vy * dt * 60;
         onGround = false;
         for (Tile t : level.getSolidTiles()) {
             Rectangle tileRect = t.getRect();
             if (getBounds().intersects(tileRect)) {
                 if (vy > 0) {
-                    y = tileRect.y - h;
+                    y = tileRect.y - PLAYER_HEIGHT;
                     vy = 0;
                     onGround = true;
                     coyoteTimer = COYOTE_TIME;
@@ -87,7 +88,7 @@ public class Player {
 
         // --- Levelgrenzen ---
         if (x < 0) x = 0;
-        if (x + w > level.getWidth()) x = level.getWidth() - w;
+        if (x + PLAYER_WIDTH > level.getWidth()) x = level.getWidth() - PLAYER_WIDTH;
         if (y > level.getHeight() + 300) {
             respawn();
             GamePanel.subLive();
@@ -139,7 +140,7 @@ public class Player {
 
     // -------- Bounds / Position ----------
     public Rectangle getBounds() {
-        return new Rectangle((int) Math.round(x), (int) Math.round(y), w, h);
+        return new Rectangle((int) Math.round(x), (int) Math.round(y), PLAYER_WIDTH, PLAYER_HEIGHT);
     }
 
     public int getY() {
@@ -158,15 +159,15 @@ public class Player {
         if (sprite != null) {
             // Sprite zeichnen (links/rechts gespiegelt)
             if (!flipX) {
-                g.drawImage(sprite, drawX, drawY, w, h, null);
+                g.drawImage(sprite, drawX, drawY, PLAYER_WIDTH, PLAYER_HEIGHT, null);
             } else {
-                g.drawImage(sprite, drawX + w, drawY, drawX, drawY + h,   // gespiegeltes Ziel
+                g.drawImage(sprite, drawX + PLAYER_WIDTH, drawY, drawX, drawY + PLAYER_HEIGHT,   // gespiegeltes Ziel
                         0, 0, sprite.getWidth(), sprite.getHeight(), null);
             }
         } else {
             // Fallback: alte Player-Zeichnung
             g.setColor(new Color(200, 30, 30));
-            g.fillRoundRect(drawX, drawY, w, h, 6, 6);
+            g.fillRoundRect(drawX, drawY, PLAYER_WIDTH, PLAYER_HEIGHT, 6, 6);
 
             g.setColor(Color.WHITE);
             g.fillOval(drawX + 8, drawY + 8, 8, 8);

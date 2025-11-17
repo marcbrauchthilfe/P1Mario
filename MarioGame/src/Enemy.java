@@ -5,10 +5,11 @@ import java.io.File;
 import java.io.IOException;
 
 public class Enemy {
-    private final int w = 32, h = 32;
+    public final int ENEMY_WIDTH = (int) (32 * Zoom.SCALE);
+    public static final int ENEMY_HEIGHT = (int) (32 * Zoom.SCALE);
     private final Level level;
     private double x, y;
-    private double vx = 1.2;
+    private double vx = 1.2 * Zoom.SCALE;
     private BufferedImage sprite;
 
     public Enemy(double x, double y, Level level) {
@@ -31,10 +32,10 @@ public class Enemy {
 
         boolean onGround = false;
         for (Tile t : level.getSolidTiles()) {
-            Rectangle test = new Rectangle((int) x, (int) nextY, w, h);
+            Rectangle test = new Rectangle((int) x, (int) nextY, ENEMY_WIDTH, ENEMY_HEIGHT);
             if (test.intersects(t.getRect())) {
                 // auf Boden setzen
-                y = t.getY() - h;
+                y = t.getY() - ENEMY_HEIGHT;
                 onGround = true;
                 break;
             }
@@ -50,8 +51,8 @@ public class Enemy {
         // =========================================
         // 2) ANTI-FALL-KANTEN-ERKENNUNG (nur wenn Boden!)
         // =========================================
-        int frontX = (int) (x + (vx > 0 ? w + 2 : -2));
-        int belowY = (int) (y + h + 2);
+        int frontX = (int) (x + (vx > 0 ? ENEMY_WIDTH + 2 : -2));
+        int belowY = (int) (y + ENEMY_HEIGHT + 2);
 
         boolean groundAhead = false;
         for (Tile t : level.getSolidTiles()) {
@@ -72,7 +73,7 @@ public class Enemy {
         // 3) HORIZONTALE BEWEGUNG
         // ==========================
         double nextX = x + vx;
-        Rectangle future = new Rectangle((int) nextX, (int) y, w, h);
+        Rectangle future = new Rectangle((int) nextX, (int) y, ENEMY_WIDTH, ENEMY_HEIGHT);
 
         Tile blockingTile = null;
         for (Tile t : level.getSolidTiles()) {
@@ -84,7 +85,7 @@ public class Enemy {
 
         if (blockingTile != null) {
             // HOCHKLETTERN VERHINDERN
-            if (blockingTile.getY() < y + h - 4) {
+            if (blockingTile.getY() < y + ENEMY_HEIGHT - 4) {
                 vx = -vx;
                 return;
             }
@@ -99,7 +100,7 @@ public class Enemy {
 
 
     public Rectangle getBounds() {
-        return new Rectangle((int) Math.round(x), (int) Math.round(y), w, h);
+        return new Rectangle((int) Math.round(x), (int) Math.round(y), ENEMY_WIDTH, ENEMY_HEIGHT);
     }
 
     public int getY() {
@@ -111,12 +112,12 @@ public class Enemy {
         int dy = (int) Math.round(y);
 
         if (sprite != null) {
-            g.drawImage(sprite, dx, dy, w, h, null);
+            g.drawImage(sprite, dx, dy, ENEMY_WIDTH, ENEMY_HEIGHT, null);
         } else {
             g.setColor(new Color(255, 140, 0));
-            g.fillOval(dx, dy, w, h);
+            g.fillOval(dx, dy, ENEMY_WIDTH, ENEMY_HEIGHT);
             g.setColor(Color.BLACK);
-            g.drawOval(dx, dy, w, h);
+            g.drawOval(dx, dy, ENEMY_WIDTH, ENEMY_HEIGHT);
         }
     }
 }

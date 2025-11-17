@@ -39,7 +39,7 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
 
     private void loadLevel(int index) {
         level = Level.createSampleLevel(index);
-        player = new Player(50, 450 - 48, level); // start slightly above ground
+        player = new Player(Level.TILE_SIZE, Level.groundY - Level.TILE_SIZE - Player.PLAYER_HEIGHT, level); // start slightly above ground
         player.loadSprite("res/player.png");
         enemies = new ArrayList<>();
         for (int[] p : level.getEnemyPositions()) {
