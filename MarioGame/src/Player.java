@@ -14,6 +14,7 @@ public class Player {
     private final double COYOTE_TIME = 0.12;
     private final double JUMP_BUFFER_TIME = 0.12;
     private final double startX, startY;
+    private static final int HORIZONTAL_COLLISION_PADDING = (int) (1 * Zoom.SCALE); // 1-2 Pixel Basis-Padding
 
     private double x, y;
     private double vx, vy;
@@ -64,9 +65,17 @@ public class Player {
         // --- vertikale Bewegung ---
         y += vy * dt * 60;
         onGround = false;
+
+        Rectangle verticalBounds = new Rectangle(
+                getX() + HORIZONTAL_COLLISION_PADDING, // Rechts einrücken
+                getY(),
+                PLAYER_WIDTH - (2 * HORIZONTAL_COLLISION_PADDING), // Breite reduzieren
+                PLAYER_HEIGHT
+        );
+
         for (Tile t : level.getSolidTiles()) {
             Rectangle tileRect = t.getRect();
-            if (getBounds().intersects(tileRect)) {
+            if (verticalBounds.intersects(tileRect)) {
                 if (vy > 0) {
                     y = tileRect.y - PLAYER_HEIGHT;
                     vy = 0;
