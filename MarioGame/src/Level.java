@@ -179,10 +179,19 @@ public class Level {
             int bgWidth = (int) (background.getWidth() * Zoom.SCALE);
             int bgHeight = (int) (background.getHeight() * Zoom.SCALE);
 
-            // Zeichne nur die notwendigen Kacheln des Hintergrunds im sichtbaren Bereich
-            int startX = (camX / 2);
-            for (int x = -startX % bgWidth; x < GamePanel.WIDTH; x += bgWidth) {
-                g.drawImage(background, startX + x, 0, bgWidth, bgHeight, null);
+            // 1. Berechne die Parallax-Verschiebung
+            int parallaxShift = camX / 2;
+
+            // 2. Berechne den Offset (damit die Kachelung bei 0 anfängt)
+            // (Wir nutzen hier das Negativ, da die Kamera nach rechts wandert)
+            int offset = -(parallaxShift % bgWidth);
+
+            // 3. Schleife, die von links nach rechts zeichnet
+            for (int x = offset; x < GamePanel.WIDTH; x += bgWidth) {
+
+                // Zeichne das Bild an der Offset-Position (x),
+                // die bereits die Kachel-Wiederholung und die Parallax-Verschiebung enthält.
+                g.drawImage(background, x, 0, bgWidth, bgHeight, null);
             }
         } else {
             g.setColor(new Color(135, 206, 250));
