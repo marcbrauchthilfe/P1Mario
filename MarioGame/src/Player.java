@@ -7,12 +7,8 @@ public class Player {
     public static final int PLAYER_WIDTH = (int) (32 * Zoom.SCALE);
     public static final int PLAYER_HEIGHT = (int) (48 * Zoom.SCALE);
     private final Level level;
-    private final double GRAVITY = 0.6 * Zoom.SCALE;
     private final double MOVE_SPEED = 2.5 * Zoom.SCALE;
     private final double JUMP_SPEED = -11 * Zoom.SCALE;
-    private final double MAX_FALL = 14.0 * Zoom.SCALE;
-    private final double COYOTE_TIME = 0.12;
-    private final double JUMP_BUFFER_TIME = 0.12;
     private final double startX, startY;
     private static final int HORIZONTAL_COLLISION_PADDING = (int) (1 * Zoom.SCALE); // 1-2 Pixel Basis-Padding
 
@@ -46,6 +42,10 @@ public class Player {
     public void update(double dt) {
         if (coyoteTimer > 0) coyoteTimer -= dt;
         if (jumpBufferTimer > 0) jumpBufferTimer -= dt;
+
+        double GRAVITY = 0.6 * Zoom.SCALE;
+        double MAX_FALL = 14.0 * Zoom.SCALE;
+        double COYOTE_TIME = 0.12;
 
         vy += GRAVITY * dt * 60;
         if (vy > MAX_FALL) vy = MAX_FALL;
@@ -120,7 +120,7 @@ public class Player {
     }
 
     public void pressJump() {
-        jumpBufferTimer = JUMP_BUFFER_TIME;
+        jumpBufferTimer = 0.12;
     }
 
     public void releaseJump() {

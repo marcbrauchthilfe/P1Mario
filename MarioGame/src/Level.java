@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Level {
     public static final int NUM_LEVELS = 4;
     private static final int BASE_TILE_SIZE = 32;
-    // TILE_SIZE wird korrekt mit dem Skalierungsfaktor multipliziert (z.B. 32 * 2 = 64)
+    // TILE_SIZE wird korrekt mit dem Skalierungsfaktor multipliziert
     public static final int TILE_SIZE = (int) (BASE_TILE_SIZE * Zoom.SCALE);
     public static final int groundY = GamePanel.HEIGHT - TILE_SIZE;
     // Annahme: PLAYER_HEIGHT ist in Player.java korrekt skaliert
@@ -137,7 +137,7 @@ public class Level {
         }
 
         // -----------------------
-        // LEVEL 4 – Finale: mehr Vertikalität & lange Sprungpassagen
+        // LEVEL 4 – Finale: mehr Vertikalitaet & lange Sprungpassagen
         // -----------------------
         else if (index == 3) {
             tiles.add(new Tile(8 * TILE_SIZE, groundY - TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
@@ -159,7 +159,7 @@ public class Level {
             level.enemyPositions = new int[][]{{13 * TILE_SIZE, spawnY}, {22 * TILE_SIZE, spawnY}, {28 * TILE_SIZE, spawnY}, {34 * TILE_SIZE, spawnY}, {40 * TILE_SIZE, spawnY}};
 
             level.endX = 49 * TILE_SIZE;
-            level.endY = groundY - 3 * TILE_SIZE;
+            level.endY = groundY - 3 * PLAYER_HEIGHT;
         }
 
         level.solidTiles = tiles;
