@@ -131,6 +131,10 @@ public class MenuManager {
         drawButton(g, controlsBtn, "Controls");
         drawButton(g, levelSelectBtn, "Level Select");
         drawButton(g, quitBtn, "Quit");
+
+        g.setFont(new Font("SansSerif", Font.BOLD, 20));
+        g.setColor(Color.YELLOW);
+        g.drawString("Total Score: " + game.getTotalScore(), 10, 50);
     }
 
     private void drawLevelSelection(Graphics2D g) {

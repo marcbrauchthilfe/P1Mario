@@ -23,10 +23,18 @@ public class GamePanel extends JPanel implements ActionListener {
 
     private final MenuManager menuManager;
 
+    private int[] levelScores;  // Score pro Level
+    private int totalScore;     // Gesamt-Score
+
+
     public GamePanel() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setBackground(Color.CYAN);
         setFocusable(true);
+
+        levelScores = new int[Level.NUM_LEVELS];
+        totalScore = 0;
+
 
         timer = new Timer(16, this);
 
@@ -161,8 +169,10 @@ public class GamePanel extends JPanel implements ActionListener {
                     }
                 }
             }
-
             if (level.isEndReached(player)) state = GameState.LEVEL_COMPLETE;
+            levelScores[currentLevelIndex] = score;  // Score für das aktuelle Level sichern
+            totalScore = 0;
+            for (int s : levelScores) totalScore += s;
         }
 
         repaint();
@@ -212,6 +222,17 @@ public class GamePanel extends JPanel implements ActionListener {
             if (!timer.isRunning()) timer.start();
         }
     }
+
+    public int getTotalScore() {
+        return totalScore;
+    }
+
+    public int getLevelScore(int levelIndex) {
+        if (levelIndex >= 0 && levelIndex < Level.NUM_LEVELS)
+            return levelScores[levelIndex];
+        return 0;
+    }
+
 
     public static void subLive() {
         lives--;
