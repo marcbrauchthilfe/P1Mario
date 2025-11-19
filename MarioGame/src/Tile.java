@@ -20,7 +20,7 @@ public class Tile {
         if (texture != null) {
             g.drawImage(texture, x - camX, y, w, h, null);
         } else {
-            g.setColor(new Color(150, 75, 0));
+            g.setColor(new Color(40, 123, 241));
             g.fillRect(x - camX, y, w, h);
         }
     }
