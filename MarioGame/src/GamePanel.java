@@ -11,10 +11,8 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
 
-    private static int lives = 3;
-
-    private GameState state = GameState.MENU;
-
+    public static int lives = 3;
+    public static GameState state = GameState.MENU;
     private final Timer timer;
 
     private boolean left, right;
@@ -116,10 +114,6 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
 
     public static void subLive() {
         lives--;
-        if (lives <= 0) {
-            // Game over -> Menü nicht erlaubt
-            // GamePanel kennt static nicht, also nichts ändern
-        }
     }
 
     public void startGame() {
@@ -127,7 +121,7 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
     }
 
     private void loadLevel(int index) {
-        level = Level.createSampleLevel(index);
+        level = Level.createSampleLevel(index + 6);
 
         // Spieler mittig auf dem Boden spawnen
         int startX = Level.TILE_SIZE;
@@ -158,13 +152,9 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
                     score = 0;
                     currentLevelIndex = 0;
                     loadLevel(0);
-                }
-
-                else if (state == GameState.START_LEVEL) {
+                } else if (state == GameState.START_LEVEL) {
                     state = GameState.RUNNING;
-                }
-
-                else if (state == GameState.LEVEL_COMPLETE) {
+                } else if (state == GameState.LEVEL_COMPLETE) {
 
                     currentLevelIndex++;
 
@@ -233,10 +223,14 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
         im.put(KeyStroke.getKeyStroke("released A"), "left_released");
 
         am.put("left_pressed", new AbstractAction() {
-            public void actionPerformed(ActionEvent e) { left = true; }
+            public void actionPerformed(ActionEvent e) {
+                left = true;
+            }
         });
         am.put("left_released", new AbstractAction() {
-            public void actionPerformed(ActionEvent e) { left = false; }
+            public void actionPerformed(ActionEvent e) {
+                left = false;
+            }
         });
 
         // RECHTS
@@ -246,10 +240,14 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
         im.put(KeyStroke.getKeyStroke("released D"), "right_released");
 
         am.put("right_pressed", new AbstractAction() {
-            public void actionPerformed(ActionEvent e) { right = true; }
+            public void actionPerformed(ActionEvent e) {
+                right = true;
+            }
         });
         am.put("right_released", new AbstractAction() {
-            public void actionPerformed(ActionEvent e) { right = false; }
+            public void actionPerformed(ActionEvent e) {
+                right = false;
+            }
         });
 
         // SPRUNG
@@ -288,6 +286,13 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
             else if (right && !left) player.moveRight();
             else player.stopHorizontal();
 
+            // --- Moving Platforms updaten ---
+            for (Tile t : level.getSolidTiles()) {
+                if (t instanceof MovingPlatform mp) {
+                    mp.update(dt);
+                }
+            }
+
             player.update(dt);
 
             for (Enemy en : new ArrayList<>(enemies)) en.update();
@@ -301,8 +306,7 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
                         enemies.remove(en);
                         score += 100;
                         player.bounceAfterStomp();
-                    }
-                    else {
+                    } else {
                         lives--;
 
                         if (lives <= 0) {
@@ -400,19 +404,18 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
         g2.drawString("Level: " + (currentLevelIndex + 1), 700, 20);
     }
 
-    private void drawCenteredString(Graphics2D g, String text, int w, int h) {
+    private void drawCenteredString(Graphics2D g, String text) {
         FontMetrics fm = g.getFontMetrics();
-        int x = (w - fm.stringWidth(text)) / 2;
-        int y = (h - fm.getHeight()) / 2 + fm.getAscent();
+        int x = (GamePanel.WIDTH - fm.stringWidth(text)) / 2;
+        int y = (GamePanel.HEIGHT - fm.getHeight()) / 2 + fm.getAscent();
         g.setColor(Color.WHITE);
-        g.fillRect(x - 10, y - fm.getAscent() - 5,
-                fm.stringWidth(text) + 20, fm.getHeight() + 10);
+        g.fillRect(x - 10, y - fm.getAscent() - 5, fm.stringWidth(text) + 20, fm.getHeight() + 10);
         g.setColor(Color.BLACK);
         g.drawString(text, x, y);
     }
 
     public void setGameState(GameState newState) {
-        this.state = newState;
+        state = newState;
 
         // Verhalten beim Wechsel in bestimmte States:
         if (newState == GameState.START_LEVEL) {

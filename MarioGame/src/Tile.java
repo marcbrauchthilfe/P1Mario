@@ -2,13 +2,13 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Tile {
-    private final int x;
-    private final int y;
+    public final BufferedImage texture;
     private final int w;
     private final int h;
-    private BufferedImage texture;
+    public int y;
+    protected int x;
 
-    public Tile(int x, int y, int w, int h,  BufferedImage texture) {
+    public Tile(int x, int y, int w, int h, BufferedImage texture) {
         this.x = x;
         this.y = y;
         this.w = w;
@@ -41,7 +41,4 @@ public class Tile {
         return w;
     }
 
-    public int getH() {
-        return h;
-    }
 }
