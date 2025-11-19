@@ -158,10 +158,10 @@ public class Level {
 
             // 3) horizontale Movers (Kettenbrücke über Canyon)
             // Plattform A: bewegt sich kurz hin und her; Spieler springt auf sie, sie fährt zu Insel
-            tiles.add(new MovingPlatform(34 * TILE_SIZE, groundY - 2 * TILE_SIZE, TILE_SIZE, TILE_SIZE, 41 * TILE_SIZE, groundY - 2 * TILE_SIZE, 1.8 * Zoom.SCALE, blockTexture));
+            tiles.add(new MovingPlatform(36 * TILE_SIZE, groundY - 2 * TILE_SIZE, TILE_SIZE, TILE_SIZE, 42 * TILE_SIZE, groundY - 2 * TILE_SIZE, 1.8 * Zoom.SCALE, blockTexture));
 
             // Plattform B: startet auf der Insel-Seite und pendelt; chain notwendig
-            tiles.add(new MovingPlatform(44 * TILE_SIZE, groundY - 2 * TILE_SIZE, TILE_SIZE, TILE_SIZE, 50 * TILE_SIZE, groundY - 2 * TILE_SIZE, 1.8 * Zoom.SCALE, blockTexture));
+            tiles.add(new MovingPlatform(50 * TILE_SIZE, groundY - 2 * TILE_SIZE, TILE_SIZE, TILE_SIZE, 44 * TILE_SIZE, groundY - 2 * TILE_SIZE, 1.8 * Zoom.SCALE, blockTexture));
 
             // 4) Insel-Anordnung nach Canyon (mehrere Stufen, hoch zum Turm)
             tiles.add(new Tile(52 * TILE_SIZE, groundY - TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
@@ -242,8 +242,8 @@ public class Level {
 
             // 2) Serie horizontaler movers auf progressively higher rows
             tiles.add(new MovingPlatform(12 * TILE_SIZE, groundY - 3 * TILE_SIZE, TILE_SIZE, TILE_SIZE, 20 * TILE_SIZE, groundY - 3 * TILE_SIZE, 2.0 * Zoom.SCALE, blockTexture));
-            tiles.add(new MovingPlatform(22 * TILE_SIZE, groundY - 5 * TILE_SIZE, TILE_SIZE, TILE_SIZE, 30 * TILE_SIZE, groundY - 5 * TILE_SIZE, 1.6 * Zoom.SCALE, blockTexture));
-            tiles.add(new MovingPlatform(32 * TILE_SIZE, groundY - 7 * TILE_SIZE, TILE_SIZE, TILE_SIZE, 40 * TILE_SIZE, groundY - 7 * TILE_SIZE, 1.8 * Zoom.SCALE, blockTexture));
+            tiles.add(new MovingPlatform(30 * TILE_SIZE, groundY - 5 * TILE_SIZE, TILE_SIZE, TILE_SIZE, 22 * TILE_SIZE, groundY - 5 * TILE_SIZE, 2.0 * Zoom.SCALE, blockTexture));
+            tiles.add(new MovingPlatform(32 * TILE_SIZE, groundY - 7 * TILE_SIZE, TILE_SIZE, TILE_SIZE, 40 * TILE_SIZE, groundY - 7 * TILE_SIZE, 2.0 * Zoom.SCALE, blockTexture));
 
             // 3) stacked vertical movers that form the ascent to the fortress roof
             tiles.add(new MovingPlatform(44 * TILE_SIZE, groundY - 3 * TILE_SIZE, TILE_SIZE, TILE_SIZE, 44 * TILE_SIZE, groundY - 10 * TILE_SIZE, Zoom.SCALE, blockTexture));
