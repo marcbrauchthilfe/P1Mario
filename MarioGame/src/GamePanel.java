@@ -14,7 +14,6 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
     public static int lives = 3;
     public static GameState state = GameState.MENU;
     private final Timer timer;
-
     private boolean left, right;
 
     private Player player;
@@ -121,7 +120,7 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
     }
 
     private void loadLevel(int index) {
-        level = Level.createSampleLevel(index);
+        level = Level.createSampleLevel(index + 6);
 
         // Spieler mittig auf dem Boden spawnen
         int startX = Level.TILE_SIZE;
@@ -228,9 +227,7 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
             }
         });
         am.put("left_released", new AbstractAction() {
-            public void actionPerformed(ActionEvent e) {
-                left = false;
-            }
+            public void actionPerformed(ActionEvent e) { left = false; }
         });
 
         // RECHTS
