@@ -121,7 +121,7 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
     }
 
     private void loadLevel(int index) {
-        level = Level.createSampleLevel(index + 6);
+        level = Level.createSampleLevel(index + 2);
 
         // Spieler mittig auf dem Boden spawnen
         int startX = Level.TILE_SIZE;
