@@ -75,8 +75,7 @@ public class Player {
         y += vy * dt * 60;
         onGround = false;
 
-        Rectangle verticalBounds = new Rectangle(getX() + HORIZONTAL_COLLISION_PADDING, getY(),
-                PLAYER_WIDTH - (2 * HORIZONTAL_COLLISION_PADDING), PLAYER_HEIGHT);
+        Rectangle verticalBounds = new Rectangle(getX() + HORIZONTAL_COLLISION_PADDING, getY(), PLAYER_WIDTH - (2 * HORIZONTAL_COLLISION_PADDING), PLAYER_HEIGHT);
 
         MovingPlatform newPlatform = null;
 
@@ -136,12 +135,27 @@ public class Player {
     }
 
     // Steuerung
-    public void moveLeft() { vx = -MOVE_SPEED; flipX = true; }
-    public void moveRight() { vx = MOVE_SPEED; flipX = false; }
-    public void stopHorizontal() { vx = 0; }
+    public void moveLeft() {
+        vx = -MOVE_SPEED;
+        flipX = true;
+    }
 
-    public void pressJump() { jumpBufferTimer = 0.12; }
-    public void releaseJump() { if (vy < 0) vy *= 0.6; }
+    public void moveRight() {
+        vx = MOVE_SPEED;
+        flipX = false;
+    }
+
+    public void stopHorizontal() {
+        vx = 0;
+    }
+
+    public void pressJump() {
+        jumpBufferTimer = 0.12;
+    }
+
+    public void releaseJump() {
+        if (vy < 0) vy *= 0.6;
+    }
 
     private void doJump() {
         vy = JUMP_SPEED;
@@ -149,19 +163,32 @@ public class Player {
         currentPlatform = null;
     }
 
-    public void bounceAfterStomp() { vy = JUMP_SPEED / 2; }
+    public void bounceAfterStomp() {
+        vy = JUMP_SPEED / 2;
+    }
 
     public void respawn() {
-        x = startX; y = startY; vx = 0; vy = 0;
+        x = startX;
+        y = startY;
+        vx = 0;
+        vy = 0;
         currentPlatform = null;
         platformPrevX = 0;
         platformPrevY = 0;
     }
 
     // BOUNDS + POSITION
-    public Rectangle getBounds() { return new Rectangle((int) Math.round(x), (int) Math.round(y), PLAYER_WIDTH, PLAYER_HEIGHT); }
-    public int getX() { return (int) Math.round(x); }
-    public int getY() { return (int) Math.round(y); }
+    public Rectangle getBounds() {
+        return new Rectangle((int) Math.round(x), (int) Math.round(y), PLAYER_WIDTH, PLAYER_HEIGHT);
+    }
+
+    public int getX() {
+        return (int) Math.round(x);
+    }
+
+    public int getY() {
+        return (int) Math.round(y);
+    }
 
     // Zeichnen
     public void draw(Graphics2D g, int camX) {
@@ -172,8 +199,7 @@ public class Player {
             if (!flipX) {
                 g.drawImage(sprite, drawX, drawY, PLAYER_WIDTH, PLAYER_HEIGHT, null);
             } else {
-                g.drawImage(sprite, drawX + PLAYER_WIDTH, drawY, drawX, drawY + PLAYER_HEIGHT,
-                        0, 0, sprite.getWidth(), sprite.getHeight(), null);
+                g.drawImage(sprite, drawX + PLAYER_WIDTH, drawY, drawX, drawY + PLAYER_HEIGHT, 0, 0, sprite.getWidth(), sprite.getHeight(), null);
             }
         } else {
             g.setColor(new Color(200, 30, 30));

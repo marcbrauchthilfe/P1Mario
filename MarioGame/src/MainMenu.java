@@ -2,9 +2,12 @@ import java.awt.*;
 
 public class MainMenu {
 
-    private GamePanel gamePanel;
+    private final GamePanel gamePanel;
 
-    private Rectangle startBtn, levelSelectBtn, controlsBtn, quitBtn;
+    private final Rectangle startBtn;
+    private final Rectangle levelSelectBtn;
+    private final Rectangle controlsBtn;
+    private final Rectangle quitBtn;
 
     public MainMenu(GamePanel panel) {
         this.gamePanel = panel;
@@ -42,8 +45,19 @@ public class MainMenu {
         g.drawString(text, x, y);
     }
 
-    public Rectangle getStartButton() { return startBtn; }
-    public Rectangle getLevelSelectButton() { return levelSelectBtn; }
-    public Rectangle getControlsButton() { return controlsBtn; }
-    public Rectangle getQuitButton() { return quitBtn; }
+    public Rectangle getStartButton() {
+        return startBtn;
+    }
+
+    public Rectangle getLevelSelectButton() {
+        return levelSelectBtn;
+    }
+
+    public Rectangle getControlsButton() {
+        return controlsBtn;
+    }
+
+    public Rectangle getQuitButton() {
+        return quitBtn;
+    }
 }

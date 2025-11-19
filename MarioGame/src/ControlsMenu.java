@@ -2,7 +2,7 @@ import java.awt.*;
 
 public class ControlsMenu {
 
-    private GamePanel gamePanel;
+    private final GamePanel gamePanel;
 
     public ControlsMenu(GamePanel panel) {
         this.gamePanel = panel;
@@ -15,14 +15,7 @@ public class ControlsMenu {
         g.setFont(new Font("Arial", Font.PLAIN, 28));
         g.setColor(Color.WHITE);
 
-        String[] lines = {
-                "Steuerung:",
-                "Links/Rechts: Pfeiltasten oder A/D",
-                "Springen: Leertaste oder W",
-                "Menü zurück: Escape",
-                "Level starten/weiter: Enter",
-                "Spiel neu starten: R"
-        };
+        String[] lines = {"Steuerung:", "Links/Rechts: Pfeiltasten oder A/D", "Springen: Leertaste oder W", "Menü zurück: Escape", "Level starten/weiter: Enter", "Spiel neu starten: R"};
 
         int totalHeight = lines.length * 40;
         int startY = (GamePanel.HEIGHT - totalHeight) / 2;

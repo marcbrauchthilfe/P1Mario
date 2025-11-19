@@ -13,8 +13,7 @@ public class MovingPlatform extends Tile {
     private double velX = 0;
     private double velY = 0;
 
-    public MovingPlatform(double x, double y, double width, double height,
-                          double endX, double endY, double speed, BufferedImage texture) {
+    public MovingPlatform(double x, double y, double width, double height, double endX, double endY, double speed, BufferedImage texture) {
         super((int) x, (int) y, (int) width, (int) height, texture);
         this.x = x;
         this.y = y;
@@ -53,8 +52,13 @@ public class MovingPlatform extends Tile {
         super.y = (int) Math.round(y);
     }
 
-    public double getVelocityX() { return velX; }
-    public double getVelocityY() { return velY; }
+    public double getVelocityX() {
+        return velX;
+    }
+
+    public double getVelocityY() {
+        return velY;
+    }
 
     @Override
     public void draw(Graphics2D g, int camX) {

@@ -8,10 +8,14 @@ public class MenuManager {
     private int mouseX, mouseY;
 
     // Buttons
-    private List<Rectangle> mainMenuButtons = new ArrayList<>();
-    private List<Rectangle> levelButtons = new ArrayList<>();
-    private Rectangle startBtn, controlsBtn, levelSelectBtn, quitBtn;
-    private Rectangle continueBtn, menuBtn;
+    private final List<Rectangle> mainMenuButtons = new ArrayList<>();
+    private final List<Rectangle> levelButtons = new ArrayList<>();
+    private final Rectangle startBtn;
+    private final Rectangle controlsBtn;
+    private final Rectangle levelSelectBtn;
+    private final Rectangle quitBtn;
+    private final Rectangle continueBtn;
+    private final Rectangle menuBtn;
 
     public MenuManager(GamePanel game) {
         this.game = game;
@@ -39,7 +43,7 @@ public class MenuManager {
 
     public void handleMousePressed(int mx, int my) {
 
-        if (game.state == GameState.MENU) {
+        if (GamePanel.state == GameState.MENU) {
             // Hauptmenü
             if (startBtn.contains(mx, my)) {
                 game.loadSelectedLevel(game.getCurrentLevelIndex());
@@ -50,14 +54,14 @@ public class MenuManager {
             } else if (quitBtn.contains(mx, my)) {
                 System.exit(0);
             }
-        } else if (game.state == GameState.LEVEL_SELECTION) {
+        } else if (GamePanel.state == GameState.LEVEL_SELECTION) {
             for (int i = 0; i < levelButtons.size(); i++) {
                 if (levelButtons.get(i).contains(mx, my)) {
                     game.loadSelectedLevel(i);
                     return;
                 }
             }
-        } else if (game.state == GameState.LEVEL_COMPLETE) {
+        } else if (GamePanel.state == GameState.LEVEL_COMPLETE) {
             if (continueBtn.contains(mx, my)) {
                 int next = game.getCurrentLevelIndex() + 1;
                 if (next >= Level.NUM_LEVELS) {
@@ -72,31 +76,29 @@ public class MenuManager {
     }
 
     public void handleEnter() {
-        if (game.state == GameState.START_LEVEL) {
+        if (GamePanel.state == GameState.START_LEVEL) {
             game.setGameState(GameState.RUNNING);
         }
     }
 
     public void handleEscape() {
-        if (game.state == GameState.RUNNING || game.state == GameState.START_LEVEL
-                || game.state == GameState.LEVEL_COMPLETE || game.state == GameState.GAME_OVER
-                || game.state == GameState.LEVEL_SELECTION || game.state == GameState.CONTROLS_MENU) {
+        if (GamePanel.state == GameState.RUNNING || GamePanel.state == GameState.START_LEVEL || GamePanel.state == GameState.LEVEL_COMPLETE || GamePanel.state == GameState.GAME_OVER || GamePanel.state == GameState.LEVEL_SELECTION || GamePanel.state == GameState.CONTROLS_MENU) {
             game.setGameState(GameState.MENU);
         }
     }
 
     public void draw(Graphics2D g) {
-        if (game.state == GameState.MENU) {
+        if (GamePanel.state == GameState.MENU) {
             drawMainMenu(g);
-        } else if (game.state == GameState.LEVEL_SELECTION) {
+        } else if (GamePanel.state == GameState.LEVEL_SELECTION) {
             drawLevelSelection(g);
-        } else if (game.state == GameState.CONTROLS_MENU) {
+        } else if (GamePanel.state == GameState.CONTROLS_MENU) {
             drawControlsMenu(g);
-        } else if (game.state == GameState.LEVEL_COMPLETE) {
+        } else if (GamePanel.state == GameState.LEVEL_COMPLETE) {
             drawLevelComplete(g);
-        } else if (game.state == GameState.GAME_OVER) {
+        } else if (GamePanel.state == GameState.GAME_OVER) {
             drawGameOver(g);
-        } else if (game.state == GameState.START_LEVEL) {
+        } else if (GamePanel.state == GameState.START_LEVEL) {
             drawStartLevel(g);
         }
     }
@@ -184,14 +186,7 @@ public class MenuManager {
         g.setFont(new Font("Arial", Font.PLAIN, 28));
         g.setColor(Color.WHITE);
 
-        String[] lines = {
-                "Steuerung:",
-                "Links/Rechts: Pfeiltasten oder A/D",
-                "Springen: Leertaste oder W",
-                "Menü zurück: Escape",
-                "Level starten/weiter: Enter",
-                "Spiel neu starten: R"
-        };
+        String[] lines = {"Steuerung:", "Links/Rechts: Pfeiltasten oder A/D", "Springen: Leertaste oder W", "Menü zurück: Escape", "Level starten/weiter: Enter", "Spiel neu starten: R"};
 
         int totalHeight = lines.length * 40;
         int startY = (GamePanel.HEIGHT - totalHeight) / 2;

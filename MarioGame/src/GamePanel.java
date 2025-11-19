@@ -9,21 +9,16 @@ public class GamePanel extends JPanel implements ActionListener {
     public static final int HEIGHT = 600;
 
     public static int lives = 3;
+    public static GameState state = GameState.MENU;
+    private final Timer timer;
+    private final MenuManager menuManager;
     private int score = 0;
     private int currentLevelIndex = 0;
-
-    public static GameState state = GameState.MENU;
-
-    private final Timer timer;
     private boolean left, right;
-
     private Player player;
     private ArrayList<Enemy> enemies;
     private Level level;
-
-    private final MenuManager menuManager;
-
-    private int[] levelScores;  // Score pro Level
+    private final int[] levelScores;  // Score pro Level
     private int totalScore;     // Gesamt-Score
 
 
@@ -42,6 +37,10 @@ public class GamePanel extends JPanel implements ActionListener {
 
         setupKeyBindings();
         setupMouse();
+    }
+
+    public static void subLive() {
+        lives--;
     }
 
     private void setupMouse() {
@@ -92,10 +91,26 @@ public class GamePanel extends JPanel implements ActionListener {
         im.put(KeyStroke.getKeyStroke("pressed D"), "right_pressed");
         im.put(KeyStroke.getKeyStroke("released D"), "right_released");
 
-        am.put("left_pressed", new AbstractAction() { public void actionPerformed(ActionEvent e) { left = true; } });
-        am.put("left_released", new AbstractAction() { public void actionPerformed(ActionEvent e) { left = false; } });
-        am.put("right_pressed", new AbstractAction() { public void actionPerformed(ActionEvent e) { right = true; } });
-        am.put("right_released", new AbstractAction() { public void actionPerformed(ActionEvent e) { right = false; } });
+        am.put("left_pressed", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                left = true;
+            }
+        });
+        am.put("left_released", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                left = false;
+            }
+        });
+        am.put("right_pressed", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                right = true;
+            }
+        });
+        am.put("right_released", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                right = false;
+            }
+        });
 
         // Springen
         im.put(KeyStroke.getKeyStroke("pressed SPACE"), "jump_pressed");
@@ -104,10 +119,14 @@ public class GamePanel extends JPanel implements ActionListener {
         im.put(KeyStroke.getKeyStroke("released W"), "jump_released");
 
         am.put("jump_pressed", new AbstractAction() {
-            public void actionPerformed(ActionEvent e) { if (player != null) player.pressJump(); }
+            public void actionPerformed(ActionEvent e) {
+                if (player != null) player.pressJump();
+            }
         });
         am.put("jump_released", new AbstractAction() {
-            public void actionPerformed(ActionEvent e) { if (player != null) player.releaseJump(); }
+            public void actionPerformed(ActionEvent e) {
+                if (player != null) player.releaseJump();
+            }
         });
     }
 
@@ -183,8 +202,7 @@ public class GamePanel extends JPanel implements ActionListener {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        if (state == GameState.RUNNING || state == GameState.START_LEVEL
-                || state == GameState.LEVEL_COMPLETE || state == GameState.GAME_OVER) {
+        if (state == GameState.RUNNING || state == GameState.START_LEVEL || state == GameState.LEVEL_COMPLETE || state == GameState.GAME_OVER) {
 
             int camX = 0;
             if (player != null) {
@@ -228,13 +246,7 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public int getLevelScore(int levelIndex) {
-        if (levelIndex >= 0 && levelIndex < Level.NUM_LEVELS)
-            return levelScores[levelIndex];
+        if (levelIndex >= 0 && levelIndex < Level.NUM_LEVELS) return levelScores[levelIndex];
         return 0;
-    }
-
-
-    public static void subLive() {
-        lives--;
     }
 }
