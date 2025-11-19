@@ -4,10 +4,14 @@ import java.awt.event.MouseEvent;
 
 public class MainMenu {
 
-    private Rectangle startButton = new Rectangle(350, 250, 200, 60);
-    private Rectangle quitButton = new Rectangle(350, 350, 200, 60);
+    private Rectangle startButton = new Rectangle(320, 200, 180, 60);
+    private Rectangle controlsButton = new Rectangle(310, 280, 200, 60);
+    private Rectangle levelSelectButton = new Rectangle(300, 360, 250, 60);
+    private Rectangle quitButton = new Rectangle(320, 440, 200, 60);
 
     private GamePanel gamePanel;
+
+    private boolean showControls = false;
 
     public MainMenu(GamePanel panel) {
         this.gamePanel = panel;
@@ -18,13 +22,19 @@ public class MainMenu {
                 int mx = e.getX();
                 int my = e.getY();
 
-                if (startButton.contains(mx, my)) {
-                    // Spiel vom Menü in den Start-Screen wechseln
-                    gamePanel.setGameState(GameState.START_LEVEL);
-                }
-
-                if (quitButton.contains(mx, my)) {
-                    System.exit(0);
+                if (!showControls) {
+                    if (startButton.contains(mx, my)) {
+                        gamePanel.setGameState(GameState.START_LEVEL);
+                    } else if (controlsButton.contains(mx, my)) {
+                        showControls = true;
+                    } else if (levelSelectButton.contains(mx, my)) {
+                        gamePanel.showLevelSelection();
+                    } else if (quitButton.contains(mx, my)) {
+                        System.exit(0);
+                    }
+                } else {
+                    // Klick irgendwo → zurück zum Menü
+                    showControls = false;
                 }
             }
         });
@@ -36,20 +46,50 @@ public class MainMenu {
 
         g.setFont(new Font("Arial", Font.BOLD, 50));
         g.setColor(Color.WHITE);
-        g.drawString("MEIN PLATFORMER", 230, 150);
+        g.drawString("Main Menü", 280, 150);
 
-        // Start Button
+        if (showControls) {
+            drawControls(g);
+        } else {
+            drawButtons(g);
+        }
+    }
+
+    private void drawButtons(Graphics2D g) {
         g.setColor(Color.LIGHT_GRAY);
         g.fill(startButton);
+        g.fill(controlsButton);
+        g.fill(levelSelectButton);
+        g.fill(quitButton);
+
         g.setColor(Color.BLACK);
         g.draw(startButton);
-        g.drawString("Start", startButton.x + 50, startButton.y + 45);
-
-        // Quit Button
-        g.setColor(Color.LIGHT_GRAY);
-        g.fill(quitButton);
-        g.setColor(Color.BLACK);
+        g.draw(controlsButton);
+        g.draw(levelSelectButton);
         g.draw(quitButton);
-        g.drawString("Beenden", quitButton.x + 10, quitButton.y + 45);
+
+        g.setFont(new Font("Arial", Font.PLAIN, 28));
+        g.drawString("Start", startButton.x + 60, startButton.y + 40);
+        g.drawString("Steuerung", controlsButton.x + 30, controlsButton.y + 40);
+        g.drawString("Level auswählen", levelSelectButton.x + 10, levelSelectButton.y + 40);
+        g.drawString("Beenden", quitButton.x + 50, quitButton.y + 40);
     }
+
+    private void drawControls(Graphics2D g) {
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.PLAIN, 24));
+        g.drawString("Steuerung:", 50, 100);
+        g.drawString("Links: Pfeil LINKS / A", 50, 150);
+        g.drawString("Rechts: Pfeil RECHTS / D", 50, 180);
+        g.drawString("Springen: LEERTASTE / W", 50, 210);
+        g.drawString("Level starten / weiter: ENTER", 50, 240);
+        g.drawString("Zurück ins Menü: ESC", 50, 270);
+        g.drawString("Klicken, um zurückzugehen", 50, 330);
+    }
+
+    // -------- Getter für GamePanel-MausListener --------
+    public Rectangle getStartButton() { return startButton; }
+    public Rectangle getQuitButton() { return quitButton; }
+    public Rectangle getControlsButton() { return controlsButton; }
+    public Rectangle getLevelSelectButton() { return levelSelectButton; }
 }

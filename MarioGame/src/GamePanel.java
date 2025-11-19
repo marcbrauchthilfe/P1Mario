@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class GamePanel extends JPanel implements java.awt.event.ActionListener {
@@ -21,6 +23,12 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
     private int currentLevelIndex = 0;
     private int score = 0;
 
+    private MainMenu mainMenu;
+    private boolean showLevelSelection,showControlsMenu ;
+
+    private Rectangle continueBtn, menuBtn;
+    private ArrayList<Rectangle> levelSelectButtons = new ArrayList<>();
+
     public GamePanel() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setBackground(Color.CYAN);
@@ -29,8 +37,77 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
         timer = new Timer(16, this);
         setupKeyBindings();
 
-        // Starte im MENU
-        state = GameState.MENU;
+        mainMenu = new MainMenu(this);
+
+        // Level Complete Buttons
+        continueBtn = new Rectangle(200, 400, 150, 40);
+        menuBtn = new Rectangle(450, 400, 150, 40);
+
+        // Level-Auswahl Buttons
+        for (int i = 0; i < Level.NUM_LEVELS; i++) {
+            levelSelectButtons.add(new Rectangle(300, 180 + i * 80, 200, 50));
+        }
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                int mx = e.getX();
+                int my = e.getY();
+
+                // --- LEVEL COMPLETE ---
+                if (state == GameState.LEVEL_COMPLETE) {
+                    if (continueBtn.contains(mx, my)) {
+                        currentLevelIndex++;
+                        if (currentLevelIndex >= Level.NUM_LEVELS) {
+                            state = GameState.GAME_OVER;
+                        } else {
+                            loadLevel(currentLevelIndex);
+                            state = GameState.START_LEVEL;
+                        }
+                    } else if (menuBtn.contains(mx, my)) {
+                        state = GameState.MENU;
+                    }
+                    return; // nur LevelComplete Buttons abfangen
+                }
+
+                // --- MENU ---
+                if (state == GameState.MENU) {
+                    if (showLevelSelection) {
+                        // Level-Auswahl Buttons
+                        for (int i = 0; i < levelSelectButtons.size(); i++) {
+                            if (levelSelectButtons.get(i).contains(mx, my)) {
+                                loadLevel(i);
+                                state = GameState.START_LEVEL;
+                                showLevelSelection = false;
+                                return;
+                            }
+                        }
+                    } else if (showControlsMenu) {
+                        // Klick irgendwo → zurück zum Menü
+                        showControlsMenu = false;
+                        return;
+                    } else {
+                        // MainMenu Buttons
+                        Rectangle startBtn = mainMenu.getStartButton();
+                        Rectangle controlsBtn = mainMenu.getControlsButton();
+                        Rectangle levelSelectBtn = mainMenu.getLevelSelectButton();
+                        Rectangle quitBtn = mainMenu.getQuitButton();
+
+                        if (startBtn.contains(mx, my)) {
+                            loadLevel(currentLevelIndex);
+                            state = GameState.START_LEVEL;
+                        } else if (controlsBtn.contains(mx, my)) {
+                            showControlsMenu = true;
+                        } else if (levelSelectBtn.contains(mx, my)) {
+                            showLevelSelection = true;
+                        } else if (quitBtn.contains(mx, my)) {
+                            System.exit(0);
+                        }
+                        return;
+                    }
+                }
+            }
+        });
     }
 
     public static void subLive() {
@@ -106,7 +183,23 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "esc_pressed");
         am.put("esc_pressed", new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                // Wenn wir gerade spielen oder LevelComplete/GameOver
+                if (state == GameState.RUNNING || state == GameState.START_LEVEL
+                        || state == GameState.LEVEL_COMPLETE || state == GameState.GAME_OVER) {
+
+                    // Zurück ins Menü
+                    state = GameState.MENU;
+
+                    // Timer stoppen, damit das Spiel nicht weiterläuft
+                    if (timer != null && timer.isRunning()) {
+                        timer.stop();
+                    }
+
+                    // Level und Player-Objekte zurücksetzen (optional)
+                    player = null;
+                    level = null;
+                    enemies = new ArrayList<>();
+                }
             }
         });
 
@@ -160,6 +253,13 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
                 if (player != null) player.releaseJump();
             }
         });
+    }
+
+    public void showLevelSelection(){
+        showLevelSelection = true;
+    }
+    public void showControlsMenu(){
+        showControlsMenu = true;
     }
 
     @Override
@@ -243,11 +343,35 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
         drawHUD(g2);
 
         if (state == GameState.START_LEVEL) {
-            drawCenteredString(g2, "PRESS ENTER TO START LEVEL");
-        } else if (state == GameState.LEVEL_COMPLETE) {
-            drawCenteredString(g2, "LEVEL COMPLETE! PRESS ENTER");
-        } else if (state == GameState.GAME_OVER) {
-            drawCenteredString(g2, "GAME OVER - Press R to restart");
+            drawCenteredString(g2, "PRESS ENTER TO START LEVEL", WIDTH, HEIGHT);
+        }
+
+        else if (state == GameState.LEVEL_COMPLETE) {
+            g2.setColor(Color.WHITE);
+            g2.fillRect(150, 250, 500, 120);
+            g2.setColor(Color.BLACK);
+            g2.drawRect(150, 250, 500, 120);
+            g2.setFont(new Font("Arial", Font.BOLD, 24));
+            g2.drawString("Level abgeschlossen!", 250, 290);
+            g2.drawString("Klicke auf Weiter, um fortzufahren", 180, 330);
+            g2.drawString("Klicke auf Menü, um zurückzugehen", 180, 370);
+
+            // Buttons
+            Rectangle continueBtn = new Rectangle(200, 400, 150, 40);
+            Rectangle menuBtn = new Rectangle(450, 400, 150, 40);
+            g2.setColor(Color.LIGHT_GRAY);
+            g2.fill(continueBtn);
+            g2.fill(menuBtn);
+            g2.setColor(Color.BLACK);
+            g2.draw(continueBtn);
+            g2.draw(menuBtn);
+            g2.drawString("Weiter", continueBtn.x + 30, continueBtn.y + 28);
+            g2.drawString("Menü", menuBtn.x + 50, menuBtn.y + 28);
+        }
+
+
+        else if (state == GameState.GAME_OVER) {
+            drawCenteredString(g2, "GAME OVER - Press R to restart", WIDTH, HEIGHT);
         }
     }
 
@@ -283,7 +407,7 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
     }
 
     public void setGameState(GameState newState) {
-        state = newState;
+        this.state = newState;
 
         // Verhalten beim Wechsel in bestimmte States:
         if (newState == GameState.START_LEVEL) {
@@ -305,6 +429,23 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
             if (timer != null && timer.isRunning()) {
                 timer.stop();
             }
+        }
+    }
+
+    private void drawLevelSelection(Graphics2D g) {
+        g.setColor(Color.DARK_GRAY);
+        g.fillRect(0, 0, WIDTH, HEIGHT);
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 36));
+        g.drawString("Level auswählen", 250, 100);
+
+        for (int i = 0; i < Level.NUM_LEVELS; i++) {
+            Rectangle levelButton = new Rectangle(300, 180 + i*80, 200, 50);
+            g.setColor(Color.LIGHT_GRAY);
+            g.fill(levelButton);
+            g.setColor(Color.BLACK);
+            g.draw(levelButton);
+            g.drawString("Level " + (i+1), levelButton.x + 60, levelButton.y + 35);
         }
     }
 }
