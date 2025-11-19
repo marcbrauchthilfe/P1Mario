@@ -113,6 +113,10 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
 
     public static void subLive() {
         lives--;
+        if (lives <= 0) {
+            // Game over -> Menü nicht erlaubt
+            // GamePanel kennt static nicht, also nichts ändern
+        }
     }
 
     public void startGame() {
@@ -183,6 +187,23 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "esc_pressed");
         am.put("esc_pressed", new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
+                // Wenn wir gerade spielen oder LevelComplete/GameOver
+                if (state == GameState.RUNNING || state == GameState.START_LEVEL
+                        || state == GameState.LEVEL_COMPLETE || state == GameState.GAME_OVER) {
+
+                    // Zurück ins Menü
+                    state = GameState.MENU;
+
+                    // Timer stoppen, damit das Spiel nicht weiterläuft
+                    if (timer != null && timer.isRunning()) {
+                        timer.stop();
+                    }
+
+                    // Level und Player-Objekte zurücksetzen (optional)
+                    player = null;
+                    level = null;
+                    enemies = new ArrayList<>();
+                }
 
                 // Wenn Levelauswahl oder Steuerungsmenü offen → schließen
                 if (showLevelSelection) {
@@ -213,7 +234,6 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
                 }
             }
         });
-
 
         // LINKS
         im.put(KeyStroke.getKeyStroke("pressed LEFT"), "left_pressed");
@@ -381,7 +401,6 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
         }
     }
 
-
     private void drawMainMenu(Graphics2D g) {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, WIDTH, HEIGHT);
@@ -414,7 +433,7 @@ public class GamePanel extends JPanel implements java.awt.event.ActionListener {
     }
 
     public void setGameState(GameState newState) {
-        state = newState;
+        this.state = newState;
 
         // Verhalten beim Wechsel in bestimmte States:
         if (newState == GameState.START_LEVEL) {
