@@ -28,7 +28,7 @@ public class MainMenu {
                     } else if (controlsButton.contains(mx, my)) {
                         showControls = true;
                     } else if (levelSelectButton.contains(mx, my)) {
-                        gamePanel.showLevelSelection();
+                        gamePanel.setshowLevelSelection(true);
                     } else if (quitButton.contains(mx, my)) {
                         System.exit(0);
                     }
