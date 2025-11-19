@@ -1,3 +1,4 @@
+/*
 import java.awt.*;
 
 public class ControlsMenu {
@@ -32,3 +33,4 @@ public class ControlsMenu {
         g.drawString(back, backX, startY + lines.length * 40 + 20);
     }
 }
+*/

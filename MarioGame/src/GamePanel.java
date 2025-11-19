@@ -244,9 +244,4 @@ public class GamePanel extends JPanel implements ActionListener {
     public int getTotalScore() {
         return totalScore;
     }
-
-    public int getLevelScore(int levelIndex) {
-        if (levelIndex >= 0 && levelIndex < Level.NUM_LEVELS) return levelScores[levelIndex];
-        return 0;
-    }
 }

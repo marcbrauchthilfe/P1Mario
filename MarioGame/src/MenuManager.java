@@ -7,8 +7,6 @@ public class MenuManager {
     private final GamePanel game;
     private int mouseX, mouseY;
 
-    // Buttons
-    private final List<Rectangle> mainMenuButtons = new ArrayList<>();
     private final List<Rectangle> levelButtons = new ArrayList<>();
     private final Rectangle startBtn;
     private final Rectangle controlsBtn;
@@ -26,6 +24,8 @@ public class MenuManager {
         levelSelectBtn = new Rectangle(300, 340, 200, 50);
         quitBtn = new Rectangle(300, 410, 200, 50);
 
+        // Buttons
+        List<Rectangle> mainMenuButtons = new ArrayList<>();
         mainMenuButtons.add(startBtn);
         mainMenuButtons.add(controlsBtn);
         mainMenuButtons.add(levelSelectBtn);

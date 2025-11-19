@@ -112,7 +112,7 @@ public class Player {
         }
         currentPlatform = newPlatform;
 
-        // Jump buffering + Coyote Time
+        // Jump-buffering + Coyote Time
         if (jumpBufferTimer > 0 && (onGround || coyoteTimer > 0)) {
             doJump();
             jumpBufferTimer = 0;

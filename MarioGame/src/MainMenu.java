@@ -1,4 +1,6 @@
+/*
 import java.awt.*;
+
 
 public class MainMenu {
 
@@ -45,19 +47,5 @@ public class MainMenu {
         g.drawString(text, x, y);
     }
 
-    public Rectangle getStartButton() {
-        return startBtn;
-    }
-
-    public Rectangle getLevelSelectButton() {
-        return levelSelectBtn;
-    }
-
-    public Rectangle getControlsButton() {
-        return controlsBtn;
-    }
-
-    public Rectangle getQuitButton() {
-        return quitBtn;
-    }
-}
+   }
+ */

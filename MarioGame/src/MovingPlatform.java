@@ -10,9 +10,6 @@ public class MovingPlatform extends Tile {
     private double x, y;
     private int direction = 1; // nur eine Richtung entlang der Linie
 
-    private double velX = 0;
-    private double velY = 0;
-
     public MovingPlatform(double x, double y, double width, double height, double endX, double endY, double speed, BufferedImage texture) {
         super((int) x, (int) y, (int) width, (int) height, texture);
         this.x = x;
@@ -37,8 +34,8 @@ public class MovingPlatform extends Tile {
         double normY = dy / dist;
 
         // Bewegung entlang der Linie
-        velX = normX * speed * direction * dt * 60;
-        velY = normY * speed * direction * dt * 60;
+        double velX = normX * speed * direction * dt * 60;
+        double velY = normY * speed * direction * dt * 60;
 
         x += velX;
         y += velY;
@@ -50,14 +47,6 @@ public class MovingPlatform extends Tile {
 
         super.x = (int) Math.round(x);
         super.y = (int) Math.round(y);
-    }
-
-    public double getVelocityX() {
-        return velX;
-    }
-
-    public double getVelocityY() {
-        return velY;
     }
 
     @Override

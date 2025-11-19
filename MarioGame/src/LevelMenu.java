@@ -1,3 +1,4 @@
+/*
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -5,12 +6,10 @@ import java.util.List;
 
 public class LevelMenu {
 
-    private final GamePanel gamePanel;
     private final List<Rectangle> levelButtons;
     private int hoveredIndex = -1; // Index des Buttons, über dem die Maus ist
 
     public LevelMenu(GamePanel panel) {
-        this.gamePanel = panel;
         levelButtons = new ArrayList<>();
         createButtons();
     }
@@ -92,3 +91,4 @@ public class LevelMenu {
         return hoveredIndex;
     }
 }
+*/
