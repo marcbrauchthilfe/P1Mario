@@ -1,83 +1,244 @@
 import java.awt.*;
-import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MenuManager {
 
-    private GamePanel gamePanel;
+    private final GamePanel game;
+    private int mouseX, mouseY;
 
-    private MainMenu mainMenu;
-    private LevelMenu levelMenu;
-    private ControlsMenu controlsMenu;
+    // Buttons
+    private List<Rectangle> mainMenuButtons = new ArrayList<>();
+    private List<Rectangle> levelButtons = new ArrayList<>();
+    private Rectangle startBtn, controlsBtn, levelSelectBtn, quitBtn;
+    private Rectangle continueBtn, menuBtn;
 
-    private enum ActiveMenu { MAIN, LEVELS, CONTROLS, NONE }
-    private ActiveMenu activeMenu;
+    public MenuManager(GamePanel game) {
+        this.game = game;
 
-    public MenuManager(GamePanel panel) {
-        this.gamePanel = panel;
+        // MainMenu Buttons
+        startBtn = new Rectangle(300, 200, 200, 50);
+        controlsBtn = new Rectangle(300, 270, 200, 50);
+        levelSelectBtn = new Rectangle(300, 340, 200, 50);
+        quitBtn = new Rectangle(300, 410, 200, 50);
 
-        mainMenu = new MainMenu(panel);
-        levelMenu = new LevelMenu(panel);
-        controlsMenu = new ControlsMenu(panel);
+        mainMenuButtons.add(startBtn);
+        mainMenuButtons.add(controlsBtn);
+        mainMenuButtons.add(levelSelectBtn);
+        mainMenuButtons.add(quitBtn);
 
-        activeMenu = ActiveMenu.MAIN;
+        // LevelComplete Buttons
+        continueBtn = new Rectangle(200, 400, 150, 40);
+        menuBtn = new Rectangle(450, 400, 150, 40);
     }
 
-    public void draw(Graphics2D g2) {
-        switch (activeMenu) {
-            case MAIN -> mainMenu.draw(g2);
-            case LEVELS -> levelMenu.draw(g2);
-            case CONTROLS -> controlsMenu.draw(g2);
-            case NONE -> {} // Nichts zeichnen
-        }
+    public void setMousePosition(int x, int y) {
+        mouseX = x;
+        mouseY = y;
     }
 
-    public void handleClick(int mx, int my) {
-        switch (activeMenu) {
-            case MAIN -> {
-                if (mainMenu.getStartButton().contains(mx, my)) {
-                    gamePanel.startLevel(gamePanel.getCurrentLevelIndex());
-                    gamePanel.state = GameState.START_LEVEL;
-                } else if (mainMenu.getLevelSelectButton().contains(mx, my)) {
-                    activeMenu = ActiveMenu.LEVELS;
-                } else if (mainMenu.getControlsButton().contains(mx, my)) {
-                    activeMenu = ActiveMenu.CONTROLS;
-                } else if (mainMenu.getQuitButton().contains(mx, my)) {
-                    System.exit(0);
+    public void handleMousePressed(int mx, int my) {
+
+        if (game.state == GameState.MENU) {
+            // Hauptmenü
+            if (startBtn.contains(mx, my)) {
+                game.loadSelectedLevel(game.getCurrentLevelIndex());
+            } else if (controlsBtn.contains(mx, my)) {
+                game.setGameState(GameState.CONTROLS_MENU);
+            } else if (levelSelectBtn.contains(mx, my)) {
+                game.setGameState(GameState.LEVEL_SELECTION);
+            } else if (quitBtn.contains(mx, my)) {
+                System.exit(0);
+            }
+        } else if (game.state == GameState.LEVEL_SELECTION) {
+            for (int i = 0; i < levelButtons.size(); i++) {
+                if (levelButtons.get(i).contains(mx, my)) {
+                    game.loadSelectedLevel(i);
+                    return;
                 }
             }
-            case LEVELS -> {
-                List<Rectangle> buttons = levelMenu.getLevelButtons();
-                for (int i = 0; i < buttons.size(); i++) {
-                    if (buttons.get(i).contains(mx, my)) {
-                        gamePanel.startLevel(i);
-                        gamePanel.state = GameState.START_LEVEL;
-                        activeMenu = ActiveMenu.MAIN;
-                        return;
-                    }
+        } else if (game.state == GameState.LEVEL_COMPLETE) {
+            if (continueBtn.contains(mx, my)) {
+                int next = game.getCurrentLevelIndex() + 1;
+                if (next >= Level.NUM_LEVELS) {
+                    game.setGameState(GameState.GAME_OVER);
+                } else {
+                    game.loadSelectedLevel(next);
                 }
-            }
-            case CONTROLS -> {
-                // Klick irgendwo → zurück zum Hauptmenü
-                activeMenu = ActiveMenu.MAIN;
+            } else if (menuBtn.contains(mx, my)) {
+                game.setGameState(GameState.MENU);
             }
         }
     }
 
-    public void closeCurrentMenu() {
-        // ESC → zurück zum Hauptmenü
-        if (activeMenu != ActiveMenu.MAIN) activeMenu = ActiveMenu.MAIN;
-    }
-
-    public void resetMenus() {
-        activeMenu = ActiveMenu.MAIN;
-    }
-
-    public void handleMouseMove(MouseEvent e) {
-        if (activeMenu == ActiveMenu.LEVELS) {
-            levelMenu.handleMouseMove(e);
+    public void handleEnter() {
+        if (game.state == GameState.START_LEVEL) {
+            game.setGameState(GameState.RUNNING);
         }
     }
 
+    public void handleEscape() {
+        if (game.state == GameState.RUNNING || game.state == GameState.START_LEVEL
+                || game.state == GameState.LEVEL_COMPLETE || game.state == GameState.GAME_OVER
+                || game.state == GameState.LEVEL_SELECTION || game.state == GameState.CONTROLS_MENU) {
+            game.setGameState(GameState.MENU);
+        }
+    }
+
+    public void draw(Graphics2D g) {
+        if (game.state == GameState.MENU) {
+            drawMainMenu(g);
+        } else if (game.state == GameState.LEVEL_SELECTION) {
+            drawLevelSelection(g);
+        } else if (game.state == GameState.CONTROLS_MENU) {
+            drawControlsMenu(g);
+        } else if (game.state == GameState.LEVEL_COMPLETE) {
+            drawLevelComplete(g);
+        } else if (game.state == GameState.GAME_OVER) {
+            drawGameOver(g);
+        } else if (game.state == GameState.START_LEVEL) {
+            drawStartLevel(g);
+        }
+    }
+
+    private void drawButton(Graphics2D g, Rectangle rect, String text) {
+        if (rect.contains(mouseX, mouseY)) g.setColor(Color.ORANGE);
+        else g.setColor(Color.LIGHT_GRAY);
+        g.fill(rect);
+
+        g.setColor(Color.BLACK);
+        g.draw(rect);
+
+        FontMetrics fm = g.getFontMetrics();
+        int textX = rect.x + (rect.width - fm.stringWidth(text)) / 2;
+        int textY = rect.y + (rect.height + fm.getAscent()) / 2 - 4;
+        g.drawString(text, textX, textY);
+    }
+
+    private void drawMainMenu(Graphics2D g) {
+        g.setColor(Color.DARK_GRAY);
+        g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+
+        g.setFont(new Font("Arial", Font.BOLD, 48));
+        String title = "SUPER JUMP GAME";
+        FontMetrics fm = g.getFontMetrics();
+        int titleX = (GamePanel.WIDTH - fm.stringWidth(title)) / 2;
+        g.setColor(Color.WHITE);
+        g.drawString(title, titleX, 100);
+
+        g.setFont(new Font("Arial", Font.PLAIN, 32));
+        drawButton(g, startBtn, "Start");
+        drawButton(g, controlsBtn, "Controls");
+        drawButton(g, levelSelectBtn, "Level Select");
+        drawButton(g, quitBtn, "Quit");
+    }
+
+    private void drawLevelSelection(Graphics2D g) {
+        g.setColor(Color.DARK_GRAY);
+        g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 36));
+        g.drawString("Level auswählen", 220, 100);
+
+        levelButtons.clear();
+
+        int columns = 4;
+        int buttonWidth = 160;
+        int buttonHeight = 60;
+        int gap = 20;
+
+        int totalLevels = Level.NUM_LEVELS;
+        int rows = (int) Math.ceil(totalLevels / (double) columns);
+
+        int gridWidth = columns * (buttonWidth + gap) - gap;
+        int startX = GamePanel.WIDTH / 2 - gridWidth / 2;
+        int startY = 180;
+
+        g.setFont(new Font("Arial", Font.PLAIN, 24));
+
+        int index = 0;
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < columns; col++) {
+                if (index >= totalLevels) break;
+                int x = startX + col * (buttonWidth + gap);
+                int y = startY + row * (buttonHeight + gap);
+
+                Rectangle btn = new Rectangle(x, y, buttonWidth, buttonHeight);
+                levelButtons.add(btn);
+
+                drawButton(g, btn, "Level " + (index + 1));
+                index++;
+            }
+        }
+    }
+
+    private void drawControlsMenu(Graphics2D g) {
+        g.setColor(Color.DARK_GRAY);
+        g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+
+        g.setFont(new Font("Arial", Font.PLAIN, 28));
+        g.setColor(Color.WHITE);
+
+        String[] lines = {
+                "Steuerung:",
+                "Links/Rechts: Pfeiltasten oder A/D",
+                "Springen: Leertaste oder W",
+                "Menü zurück: Escape",
+                "Level starten/weiter: Enter",
+                "Spiel neu starten: R"
+        };
+
+        int totalHeight = lines.length * 40;
+        int startY = (GamePanel.HEIGHT - totalHeight) / 2;
+
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+            int x = (GamePanel.WIDTH - g.getFontMetrics().stringWidth(line)) / 2;
+            int y = startY + i * 40;
+            g.drawString(line, x, y);
+        }
+
+        String back = "Klicke oder drücke ESC, um zurückzugehen";
+        int backX = (GamePanel.WIDTH - g.getFontMetrics().stringWidth(back)) / 2;
+        g.drawString(back, backX, startY + lines.length * 40 + 20);
+    }
+
+    private void drawLevelComplete(Graphics2D g) {
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 48));
+        g.drawString("LEVEL COMPLETE", 200, 200);
+
+        g.setFont(new Font("Arial", Font.PLAIN, 32));
+        drawButton(g, continueBtn, "Continue");
+        drawButton(g, menuBtn, "Menu");
+    }
+
+    private void drawGameOver(Graphics2D g) {
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+
+        g.setColor(Color.RED);
+        g.setFont(new Font("Arial", Font.BOLD, 48));
+        g.drawString("GAME OVER", 250, 200);
+
+        g.setFont(new Font("Arial", Font.PLAIN, 32));
+        String restart = "Press R to restart";
+        g.drawString(restart, 250, 300);
+    }
+
+    private void drawStartLevel(Graphics2D g) {
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Arial", Font.BOLD, 36));
+        String msg = "PRESS ENTER TO START LEVEL";
+        int x = (GamePanel.WIDTH - g.getFontMetrics().stringWidth(msg)) / 2;
+        int y = GamePanel.HEIGHT / 2;
+        g.setColor(Color.WHITE);
+        g.fillRect(x - 10, y - 30, g.getFontMetrics().stringWidth(msg) + 20, 40);
+        g.setColor(Color.BLACK);
+        g.drawString(msg, x, y);
+    }
 }

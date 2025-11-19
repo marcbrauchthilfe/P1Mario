@@ -34,7 +34,7 @@ public class ControlsMenu {
             g.drawString(line, x, y);
         }
 
-        String back = "Drücke ESC oder klicke, um zurückzugehen";
+        String back = "Drücke ESC um zurückzugehen";
         int backX = (GamePanel.WIDTH - g.getFontMetrics().stringWidth(back)) / 2;
         g.drawString(back, backX, startY + lines.length * 40 + 20);
     }

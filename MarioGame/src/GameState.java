@@ -3,5 +3,7 @@ public enum GameState {
     START_LEVEL,
     RUNNING,
     LEVEL_COMPLETE,
-    GAME_OVER
+    GAME_OVER,
+    LEVEL_SELECTION,
+    CONTROLS_MENU
 }
