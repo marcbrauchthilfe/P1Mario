@@ -5,8 +5,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class Enemy {
-    public final int ENEMY_WIDTH = (int) (32 * Zoom.SCALE);
     public static final int ENEMY_HEIGHT = (int) (32 * Zoom.SCALE);
+    public final int ENEMY_WIDTH = (int) (32 * Zoom.SCALE);
     private final Level level;
     private double x, y;
     private double vx = 1.2 * Zoom.SCALE;
@@ -16,7 +16,7 @@ public class Enemy {
         this.x = x;
         this.y = y;
         this.level = level;
-        try{
+        try {
             sprite = ImageIO.read(new File("res/enemy.png"));
         } catch (IOException e) {
             System.err.println("Enemy sprite loading failed.");

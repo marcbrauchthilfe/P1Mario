@@ -1,3 +1,3 @@
 public class Zoom {
-    public static final double SCALE = 1.5;
+    public static final double SCALE = 1;
 }
