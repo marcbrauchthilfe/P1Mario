@@ -38,12 +38,13 @@ public class MenuManager {
         mainMenuButtons.add(levelSelectBtn);
         mainMenuButtons.add(quitBtn);
 
-        // LevelComplete Buttons
-        continueBtn = new Rectangle(200, 400, 150, 40);
-        menuBtn = new Rectangle(450, 400, 150, 40);
+        // LevelComplete Button
+        continueBtn = new Rectangle(300, 250, 200, 50);
 
-        // GameOver Buttons
+        // GameOver Button
         restartBtn = new Rectangle(300, 250, 200, 50);
+
+        // Menu Button
         menuBtn = new Rectangle(300, 350, 200, 50);
     }
 
@@ -230,7 +231,7 @@ public class MenuManager {
 
         g.setFont(new Font("Arial", Font.PLAIN, 32));
         drawButton(g, continueBtn, "Continue");
-        drawButton(g, menuBtn, "Menu");
+        drawButton(g, menuBtn, "Main Menu");
     }
 
     private void drawGameOver(Graphics2D g) {
