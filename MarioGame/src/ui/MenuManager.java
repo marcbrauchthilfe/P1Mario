@@ -2,6 +2,7 @@ package ui;
 
 import levels.Level;
 import main.GamePanel;
+import main.Storage;
 import utils.GameState;
 
 import java.awt.*;
@@ -20,9 +21,11 @@ public class MenuManager {
     private final Rectangle restartBtn;
     private final Rectangle menuBtn;
     private int mouseX, mouseY;
+    Storage storage;
 
     public MenuManager(GamePanel game) {
         this.game = game;
+        storage = new Storage();
 
         // MainMenu Buttons
         startBtn = new Rectangle(300, 200, 200, 50);
@@ -66,6 +69,7 @@ public class MenuManager {
                 }
             }
         } else if (GamePanel.state == GameState.LEVEL_COMPLETE) {
+            game.setCurrentScore(0);
             if (continueBtn.contains(mx, my)) {
                 int next = game.getCurrentLevelIndex() + 1;
                 if (next >= Level.NUM_LEVELS) {
@@ -146,7 +150,7 @@ public class MenuManager {
 
         g.setFont(new Font("SansSerif", Font.BOLD, 20));
         g.setColor(Color.YELLOW);
-        g.drawString("Total Score: " + game.getTotalScore(), 10, 50);
+        g.drawString("Total Score: " + Storage.getTotalScore(), 10, 50);
     }
 
     private void drawLevelSelection(Graphics2D g) {
@@ -221,6 +225,10 @@ public class MenuManager {
         g.setFont(new Font("Arial", Font.BOLD, 48));
         g.drawString("LEVEL COMPLETE", 200, 200);
 
+        g.setColor(Color.YELLOW);
+        g.setFont(new Font("Arial", Font.PLAIN, 24));
+        g.drawString("YOUR SCORE WAS: " + game.getCurrentScore() + "!", 250, 225);
+
         g.setFont(new Font("Arial", Font.PLAIN, 32));
         drawButton(g, continueBtn, "Continue");
         drawButton(g, menuBtn, "Main Menu");
@@ -241,7 +249,7 @@ public class MenuManager {
         // Total Score
         g.setFont(new Font("SansSerif", Font.BOLD, 24));
         g.setColor(Color.ORANGE);
-        g.drawString("Total Score: " + game.getTotalScore(), 10, 50);
+        g.drawString("Total Score: " + Storage.getTotalScore(), 10, 50);
 
         // Buttons
         g.setFont(new Font("Arial", Font.PLAIN, 32));
