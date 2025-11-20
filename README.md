@@ -1,6 +1,5 @@
 Bekannte Fehler:
 1. Level 5: Kamera bewegt sich nicht mit bis zum Ende
-2. Man respawed mit 0 Leben
 
 
 
