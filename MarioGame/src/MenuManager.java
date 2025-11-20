@@ -13,7 +13,8 @@ public class MenuManager {
     private final Rectangle levelSelectBtn;
     private final Rectangle quitBtn;
     private final Rectangle continueBtn;
-    private final Rectangle menuBtn;
+    private Rectangle menuBtn;
+    private final Rectangle restartBtn;
 
     public MenuManager(GamePanel game) {
         this.game = game;
@@ -34,6 +35,10 @@ public class MenuManager {
         // LevelComplete Buttons
         continueBtn = new Rectangle(200, 400, 150, 40);
         menuBtn = new Rectangle(450, 400, 150, 40);
+
+        // GameOver Buttons
+        restartBtn = new Rectangle(300, 250, 200, 50);
+        menuBtn = new Rectangle(300, 350, 200, 50);
     }
 
     public void setMousePosition(int x, int y) {
@@ -69,6 +74,12 @@ public class MenuManager {
                 } else {
                     game.loadSelectedLevel(next);
                 }
+            } else if (menuBtn.contains(mx, my)) {
+                game.setGameState(GameState.MENU);
+            }
+        } else if (GamePanel.state == GameState.GAME_OVER) {
+            if (restartBtn.contains(mx, my)) {
+                game.restartLevel();  // definiere diese Methode im GamePanel
             } else if (menuBtn.contains(mx, my)) {
                 game.setGameState(GameState.MENU);
             }
@@ -220,13 +231,23 @@ public class MenuManager {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
 
+        // Titel
         g.setColor(Color.RED);
         g.setFont(new Font("Arial", Font.BOLD, 48));
-        g.drawString("GAME OVER", 250, 200);
+        String title = "GAME OVER";
+        FontMetrics fm = g.getFontMetrics();
+        int titleX = (GamePanel.WIDTH - fm.stringWidth(title)) / 2;
+        g.drawString(title, titleX, 100);
 
+        // Total Score
+        g.setFont(new Font("SansSerif", Font.BOLD, 24));
+        g.setColor(Color.ORANGE);
+        g.drawString("Total Score: " + game.getTotalScore(), 10, 50);
+
+        // Buttons
         g.setFont(new Font("Arial", Font.PLAIN, 32));
-        String restart = "Press R to restart";
-        g.drawString(restart, 250, 300);
+        drawButton(g, restartBtn, "Restart ");
+        drawButton(g, menuBtn, "Main Menu ");
     }
 
     private void drawStartLevel(Graphics2D g) {

@@ -241,6 +241,21 @@ public class GamePanel extends JPanel implements ActionListener {
         }
     }
 
+    public void restartLevel() {
+        lives = 3;
+        score = 0;
+        loadSelectedLevel(currentLevelIndex);
+        state = GameState.START_LEVEL;
+    }
+
+    public void keyPressed(KeyEvent e) {
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_R -> restartLevel();
+            case KeyEvent.VK_ESCAPE -> menuManager.handleEscape();
+            case KeyEvent.VK_ENTER -> menuManager.handleEnter();
+        }
+    }
+
     public int getTotalScore() {
         return totalScore;
     }
