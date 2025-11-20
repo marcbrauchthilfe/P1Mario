@@ -15,36 +15,32 @@ import java.util.ArrayList;
 
 public class GamePanel extends JPanel implements ActionListener {
 
+    private final MenuManager menuManager;
+    private final Timer timer;
+    private final Storage storage;
+    public static GameState state = GameState.MENU;
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
-
     public static int lives = 3;
-    public static GameState state = GameState.MENU;
-    private final Timer timer;
-    private final MenuManager menuManager;
-    private final int[] levelScores;  // Score pro Level
-    private int score = 0;
-    private int currentLevelIndex = 0;
+    private int currentLevelIndex;
+    private int currentScore;
     private boolean left, right;
     private Player player;
     private ArrayList<Enemy> enemies;
     private Level level;
-    private int totalScore;     // Gesamt-Score
-
 
     public GamePanel() {
+
+        menuManager = new MenuManager(this);
+        timer = new Timer(16, this);
+        storage = new Storage();
+
+        currentScore = 0;
+        currentLevelIndex = 0;
+
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setBackground(Color.CYAN);
         setFocusable(true);
-
-        levelScores = new int[Level.NUM_LEVELS];
-        totalScore = 0;
-
-
-        timer = new Timer(16, this);
-
-        menuManager = new MenuManager(this);
-
         setupKeyBindings();
         setupMouse();
     }
@@ -189,7 +185,7 @@ public class GamePanel extends JPanel implements ActionListener {
                 if (player.getBounds().intersects(en.getBounds())) {
                     if (player.isFalling() && player.getY() < en.getY()) {
                         enemies.remove(en);
-                        score += 100;
+                        currentScore += 100;
                         player.bounceAfterStomp();
                     } else {
                         lives--;
@@ -198,12 +194,14 @@ public class GamePanel extends JPanel implements ActionListener {
                     }
                 }
             }
-            if (level.isEndReached(player)) state = GameState.LEVEL_COMPLETE;
-            levelScores[currentLevelIndex] = score;  // Score für das aktuelle Level sichern
-            totalScore = 0;
-            for (int s : levelScores) totalScore += s;
+            if (level.isEndReached(player)) {
+                state = GameState.LEVEL_COMPLETE;
+                if (currentScore > storage.getLevelHighscores()[currentLevelIndex]) {
+                    storage.setLevelHighscores(currentLevelIndex, currentScore);
+                }
+                Storage.setTotalScore(Storage.getTotalScore() + storage.getLevelHighscores()[currentLevelIndex]);
+            }
         }
-
         repaint();
     }
 
@@ -228,7 +226,6 @@ public class GamePanel extends JPanel implements ActionListener {
 
             drawHUD(g2);
         }
-
         // Menü zeichnen
         menuManager.draw(g2);
     }
@@ -236,7 +233,7 @@ public class GamePanel extends JPanel implements ActionListener {
     private void drawHUD(Graphics2D g2) {
         g2.setColor(Color.BLACK);
         g2.setFont(new Font("SansSerif", Font.BOLD, 18));
-        g2.drawString("Score: " + score, 10, 20);
+        g2.drawString("Score: " + currentScore, 10, 20);
         g2.drawString("Lives: " + lives, 10, 40);
         g2.drawString("Level: " + (currentLevelIndex + 1), 700, 20);
     }
@@ -253,12 +250,15 @@ public class GamePanel extends JPanel implements ActionListener {
 
     public void restartLevel() {
         lives = 3;
-        score = 0;
+        currentScore = 0;
         loadSelectedLevel(currentLevelIndex);
         state = GameState.START_LEVEL;
     }
 
-    public int getTotalScore() {
-        return totalScore;
+    public int getCurrentScore() {
+        return  currentScore;
+    }
+    public void setCurrentScore(int currentScore) {
+        this.currentScore = currentScore;
     }
 }
