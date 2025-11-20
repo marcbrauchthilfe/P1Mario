@@ -10,14 +10,15 @@ public class Enemy {
     private final Level level;
     private double x, y;
     private double vx = 1.2 * Zoom.SCALE;
-    private BufferedImage sprite;
+    private BufferedImage sprite = null;
+    private boolean flipX = false;
 
     public Enemy(double x, double y, Level level) {
         this.x = x;
         this.y = y;
         this.level = level;
         try {
-            sprite = ImageIO.read(new File("res/enemy.png"));
+            sprite = ImageIO.read(new File("res/Geist_V3.png"));
         } catch (IOException e) {
             System.err.println("Enemy sprite loading failed.");
         }
@@ -65,6 +66,7 @@ public class Enemy {
         if (!groundAhead) {
             // keine Kante → umdrehen
             vx = -vx;
+            flipX = !flipX;
             return;
         }
 
@@ -87,9 +89,11 @@ public class Enemy {
             // HOCHKLETTERN VERHINDERN
             if (blockingTile.getY() < y + ENEMY_HEIGHT - 4) {
                 vx = -vx;
+                flipX = !flipX;
                 return;
             }
             // normale Kollision
+            flipX = !flipX;
             vx = -vx;
             return;
         }
@@ -112,7 +116,11 @@ public class Enemy {
         int dy = (int) Math.round(y);
 
         if (sprite != null) {
-            g.drawImage(sprite, dx, dy, ENEMY_WIDTH, ENEMY_HEIGHT, null);
+            if (!flipX) {
+                g.drawImage(sprite, dx, dy, ENEMY_WIDTH, ENEMY_HEIGHT, null);
+            } else {
+                g.drawImage(sprite, dx + ENEMY_WIDTH, dy, dx, dy + ENEMY_HEIGHT, 0, 0, sprite.getWidth(), sprite.getHeight(), null);
+            }
         } else {
             g.setColor(new Color(255, 140, 0));
             g.fillOval(dx, dy, ENEMY_WIDTH, ENEMY_HEIGHT);
