@@ -47,7 +47,7 @@ public class Level {
 
     public static Level createSampleLevel(int index) {
         // Level-Dimensionen skalieren
-        Level level = new Level((int) (2500 * Zoom.SCALE), (int) (600 * Zoom.SCALE));
+        Level level = new Level((int) (3000 * Zoom.SCALE), (int) (600 * Zoom.SCALE));
         ArrayList<Tile> tiles = new ArrayList<>();
 
         int spawnY = groundY - TILE_SIZE;

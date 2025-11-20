@@ -238,7 +238,7 @@ public class GamePanel extends JPanel implements ActionListener {
         g2.setFont(new Font("SansSerif", Font.BOLD, 18));
         g2.drawString("Score: " + score, 10, 20);
         g2.drawString("Lives: " + lives, 10, 40);
-        g2.drawString("levels.Level: " + (currentLevelIndex + 1), 700, 20);
+        g2.drawString("Level: " + (currentLevelIndex + 1), 700, 20);
     }
 
     public void setGameState(GameState newState) {
