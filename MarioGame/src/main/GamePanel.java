@@ -28,7 +28,7 @@ public class GamePanel extends JPanel implements ActionListener {
     private Player player;
     private ArrayList<Enemy> enemies;
     private Level level;
-    private final int[] levelScores;  // Score pro levels.Level
+    private final int[] levelScores;  // Score pro Level
     private int totalScore;     // Gesamt-Score
 
 
@@ -199,7 +199,7 @@ public class GamePanel extends JPanel implements ActionListener {
                 }
             }
             if (level.isEndReached(player)) state = GameState.LEVEL_COMPLETE;
-            levelScores[currentLevelIndex] = score;  // Score für das aktuelle levels.Level sichern
+            levelScores[currentLevelIndex] = score;  // Score für das aktuelle Level sichern
             totalScore = 0;
             for (int s : levelScores) totalScore += s;
         }

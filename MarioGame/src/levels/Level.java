@@ -145,7 +145,7 @@ public class Level {
         }
 
         // -----------------------
-        // LEVEL 4 – Finale: mehr Vertikalitaet & lange Sprungpassagen
+        // LEVEL 4 – Finale: mehr vertikale & lange Sprungpassagen
         // -----------------------
         else if (index == 3) {
             tiles.add(new Tile(8 * TILE_SIZE, groundY - TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
