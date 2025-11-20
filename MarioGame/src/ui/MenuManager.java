@@ -11,16 +11,15 @@ import java.util.List;
 public class MenuManager {
 
     private final GamePanel game;
-    private int mouseX, mouseY;
-
     private final List<Rectangle> levelButtons = new ArrayList<>();
     private final Rectangle startBtn;
     private final Rectangle controlsBtn;
     private final Rectangle levelSelectBtn;
     private final Rectangle quitBtn;
     private final Rectangle continueBtn;
-    private Rectangle menuBtn;
     private final Rectangle restartBtn;
+    private final Rectangle menuBtn;
+    private int mouseX, mouseY;
 
     public MenuManager(GamePanel game) {
         this.game = game;
@@ -30,13 +29,6 @@ public class MenuManager {
         controlsBtn = new Rectangle(300, 270, 200, 50);
         levelSelectBtn = new Rectangle(300, 340, 200, 50);
         quitBtn = new Rectangle(300, 410, 200, 50);
-
-        // Buttons
-        List<Rectangle> mainMenuButtons = new ArrayList<>();
-        mainMenuButtons.add(startBtn);
-        mainMenuButtons.add(controlsBtn);
-        mainMenuButtons.add(levelSelectBtn);
-        mainMenuButtons.add(quitBtn);
 
         // LevelComplete Button
         continueBtn = new Rectangle(300, 250, 200, 50);

@@ -3,7 +3,7 @@ package main;
 import javax.swing.*;
 
 public class Main {
-    static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> Game.createAndShowGUI());
+    static void main() {
+        SwingUtilities.invokeLater(Game::createAndShowGUI);
     }
 }

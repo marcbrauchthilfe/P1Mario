@@ -22,13 +22,13 @@ public class GamePanel extends JPanel implements ActionListener {
     public static GameState state = GameState.MENU;
     private final Timer timer;
     private final MenuManager menuManager;
+    private final int[] levelScores;  // Score pro Level
     private int score = 0;
     private int currentLevelIndex = 0;
     private boolean left, right;
     private Player player;
     private ArrayList<Enemy> enemies;
     private Level level;
-    private final int[] levelScores;  // Score pro Level
     private int totalScore;     // Gesamt-Score
 
 
@@ -256,14 +256,6 @@ public class GamePanel extends JPanel implements ActionListener {
         score = 0;
         loadSelectedLevel(currentLevelIndex);
         state = GameState.START_LEVEL;
-    }
-
-    public void keyPressed(KeyEvent e) {
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_R -> restartLevel();
-            case KeyEvent.VK_ESCAPE -> menuManager.handleEscape();
-            case KeyEvent.VK_ENTER -> menuManager.handleEnter();
-        }
     }
 
     public int getTotalScore() {
