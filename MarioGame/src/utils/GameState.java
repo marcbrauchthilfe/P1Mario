@@ -1,3 +1,5 @@
+package utils;
+
 public enum GameState {
     MENU,
     START_LEVEL,

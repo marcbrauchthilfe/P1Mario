@@ -1,3 +1,9 @@
+package levels;
+
+import entities.Player;
+import main.GamePanel;
+import utils.Zoom;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -10,7 +16,7 @@ public class Level {
     // TILE_SIZE wird korrekt mit dem Skalierungsfaktor multipliziert
     public static final int TILE_SIZE = (int) (BASE_TILE_SIZE * Zoom.SCALE);
     public static final int groundY = GamePanel.HEIGHT - TILE_SIZE;
-    // Annahme: PLAYER_HEIGHT ist in Player.java korrekt skaliert
+    // Annahme: PLAYER_HEIGHT ist in entities.Player.java korrekt skaliert
     private static final int PLAYER_HEIGHT = Player.PLAYER_HEIGHT;
     private static BufferedImage groundTexture;
     private static BufferedImage blockTexture;
@@ -202,7 +208,7 @@ public class Level {
             for (int h = 0; h < 5; h++) {
                 tiles.add(new Tile(78 * TILE_SIZE, groundY - (h + 1) * TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
             }
-            //tiles.add(new Tile(80 * TILE_SIZE, groundY - 6 * TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture)); // Flag base
+            //tiles.add(new levels.Tile(80 * TILE_SIZE, groundY - 6 * TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture)); // Flag base
 
             level.enemyPositions = new int[][]{{13 * TILE_SIZE, spawnY}, {34 * TILE_SIZE, spawnY}};
             level.endX = 80 * TILE_SIZE;

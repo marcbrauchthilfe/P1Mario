@@ -1,3 +1,9 @@
+package ui;
+
+import levels.Level;
+import main.GamePanel;
+import utils.GameState;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +85,7 @@ public class MenuManager {
             }
         } else if (GamePanel.state == GameState.GAME_OVER) {
             if (restartBtn.contains(mx, my)) {
-                game.restartLevel();  // definiere diese Methode im GamePanel
+                game.restartLevel();  // definiere diese Methode im main.GamePanel
             } else if (menuBtn.contains(mx, my)) {
                 game.setGameState(GameState.MENU);
             }
