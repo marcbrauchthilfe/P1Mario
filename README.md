@@ -1,5 +1,7 @@
 Bekannte Fehler:
 1. Level 5: Kamera bewegt sich nicht mit bis zum Ende
+2. Man respawed mit 0 Leben
+
 
 
 
@@ -9,7 +11,7 @@ Bekannte Fehler:
 
 Möhliche verbesserungen:
 1. Neu Texturen:
-   a. Gegner
+   a. Gegner(done)
    b. Boden
    c. Hintergrund
    d. Thematisch passende MenuSceens
@@ -23,6 +25,8 @@ Möhliche verbesserungen:
    d. ...
 
 6. Loading Sceens(als Inputbuffer)
+7. Localen un Globalen Score(Global = alle localen Scores) speichern
+8. Level erst nach und nach freischalten
 
 
 
