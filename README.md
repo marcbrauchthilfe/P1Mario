@@ -1,8 +1,5 @@
 Bekannte Fehler:
 
-
-
-
 Möhliche verbesserungen:
 1. Neu Texturen:
    a. Gegner (done)
@@ -19,8 +16,8 @@ Möhliche verbesserungen:
    d. ...
 
 6. Loading Sceens(als Inputbuffer)
-7. Localen un Globalen Score(Global = alle localen Scores) speichern
-8. Level erst nach und nach freischalten
+7. Localen un Globalen Score(Global = alle localen Scores) speichern (größtenteils done)
+8. Level erst nach und nach freischalten (Ralf)
 
 
 
