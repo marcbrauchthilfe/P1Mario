@@ -1,3 +1,13 @@
+package main;
+
+import entities.Enemy;
+import entities.Player;
+import levels.Level;
+import levels.MovingPlatform;
+import levels.Tile;
+import ui.MenuManager;
+import utils.GameState;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -18,7 +28,7 @@ public class GamePanel extends JPanel implements ActionListener {
     private Player player;
     private ArrayList<Enemy> enemies;
     private Level level;
-    private final int[] levelScores;  // Score pro Level
+    private final int[] levelScores;  // Score pro levels.Level
     private int totalScore;     // Gesamt-Score
 
 
@@ -189,7 +199,7 @@ public class GamePanel extends JPanel implements ActionListener {
                 }
             }
             if (level.isEndReached(player)) state = GameState.LEVEL_COMPLETE;
-            levelScores[currentLevelIndex] = score;  // Score für das aktuelle Level sichern
+            levelScores[currentLevelIndex] = score;  // Score für das aktuelle levels.Level sichern
             totalScore = 0;
             for (int s : levelScores) totalScore += s;
         }
@@ -228,7 +238,7 @@ public class GamePanel extends JPanel implements ActionListener {
         g2.setFont(new Font("SansSerif", Font.BOLD, 18));
         g2.drawString("Score: " + score, 10, 20);
         g2.drawString("Lives: " + lives, 10, 40);
-        g2.drawString("Level: " + (currentLevelIndex + 1), 700, 20);
+        g2.drawString("levels.Level: " + (currentLevelIndex + 1), 700, 20);
     }
 
     public void setGameState(GameState newState) {

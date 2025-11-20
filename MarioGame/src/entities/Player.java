@@ -1,3 +1,12 @@
+package entities;
+
+import levels.Level;
+import levels.MovingPlatform;
+import levels.Tile;
+import main.GamePanel;
+import utils.GameState;
+import utils.Zoom;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -119,7 +128,7 @@ public class Player {
             coyoteTimer = 0;
         }
 
-        // Level-Grenzen
+        // levels.Level-Grenzen
         if (x < 0) x = 0;
         if (x + PLAYER_WIDTH > level.getWidth()) x = level.getWidth() - PLAYER_WIDTH;
 

@@ -1,3 +1,9 @@
+package entities;
+
+import levels.Level;
+import levels.Tile;
+import utils.Zoom;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -20,7 +26,7 @@ public class Enemy {
         try {
             sprite = ImageIO.read(new File("res/Geist_V3.png"));
         } catch (IOException e) {
-            System.err.println("Enemy sprite loading failed.");
+            System.err.println("entities.Enemy sprite loading failed.");
         }
     }
 
