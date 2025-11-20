@@ -3,16 +3,11 @@ Bekannte Fehler:
 
 
 
-
-
-
-
-
 Möhliche verbesserungen:
 1. Neu Texturen:
-   a. Gegner(done)
-   b. Boden
-   c. Hintergrund
+   a. Gegner (done)
+   b. Boden (done)
+   c. Hintergrund (done)
    d. Thematisch passende MenuSceens
    
 3. Am Ende jedes Level ein Schloss oder ähnliches als Ziel und Barriere
