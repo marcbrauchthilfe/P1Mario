@@ -19,9 +19,9 @@ public class Level {
     // Ressourcen werden nur einmal beim Start geladen (sauberer)
     static {
         try {
-            groundTexture = ImageIO.read(new File("res/ground.png"));
-            blockTexture = ImageIO.read(new File("res/block.png"));
-            background = ImageIO.read(new File("res/background.png"));
+            groundTexture = ImageIO.read(new File("res/ground_V2.png"));
+            blockTexture = ImageIO.read(new File("res/block_V2.png"));
+            background = ImageIO.read(new File("res/background_V2.png"));
         } catch (Exception e) {
             System.err.println("Fehler beim Laden der Level-Texturen.");
         }
