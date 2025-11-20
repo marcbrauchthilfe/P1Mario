@@ -20,7 +20,7 @@ public class Level {
     static {
         try {
             groundTexture = ImageIO.read(new File("res/ground_V2.png"));
-            blockTexture = ImageIO.read(new File("res/block_V2.png"));
+            blockTexture = ImageIO.read(new File("res/block_V3.png"));
             background = ImageIO.read(new File("res/background_V2.png"));
         } catch (Exception e) {
             System.err.println("Fehler beim Laden der Level-Texturen.");
