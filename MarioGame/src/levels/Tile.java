@@ -22,7 +22,7 @@ public class Tile {
         if (texture != null) {
             g.drawImage(texture, x - camX, y, w, h, null);
         } else {
-            g.setColor(new Color(40, 123, 241));
+            g.setColor(new Color(0, 69, 168));
             g.fillRect(x - camX, y, w, h);
         }
     }
