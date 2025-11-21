@@ -1,13 +1,10 @@
 Bekannte Fehler:
+locale Levelscore wird bei Doppelklick im Levelcomplite Menu faslch angezeigt
 
 Level 4: Flagge einen näher, Block darunter
 
 Möhliche verbesserungen:
-1. Neu Texturen:
-   a. Gegner (done)
-   b. Boden (done)
-   c. Hintergrund (done)
-   d. Thematisch passende MenuSceens
+1. Neu Texturen --> Thematisch passende MenuSceens
    
 3. Am Ende jedes Level ein Schloss oder ähnliches als Ziel und Barriere: evtl. aus Tiles, neue Texturen
 
@@ -17,9 +14,8 @@ Möhliche verbesserungen:
    c. OPP
    d. ...
 
-5. Loading Sceens(als Inputbuffer)
-6. Localen un Globalen Score(Global = alle localen Scores) speichern (größtenteils done)
-7. Level erst nach und nach freischalten (Ralf)
+5. Loading Sceens(als Inputbuffer und für update funktionen)
+6. Level erst nach und nach freischalten (Ralf)
 
 
 
