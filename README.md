@@ -1,5 +1,6 @@
 Bekannte Fehler:
 locale Levelscore wird bei Doppelklick im Levelcomplite Menu faslch angezeigt
+wenn einmal alle Leben weg sind spawnd man immer mit 0 oder negativen Leben
 
 Level 4: Flagge einen näher, Block darunter
 
