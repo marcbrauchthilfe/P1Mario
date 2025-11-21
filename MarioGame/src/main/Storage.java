@@ -31,9 +31,9 @@ public class Storage {
     }
 
     public void updateTotalScore() {
-        this.totalScore = 0;
+        totalScore = 0;
         for (int i = totalNumberOfLevels -1; i >= 0; i--) {
-            this.totalScore = this.totalScore + getLevelHighscores(i);
+            totalScore = totalScore + getLevelHighscores(i);
         }
     }
 }
