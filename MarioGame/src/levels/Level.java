@@ -53,7 +53,7 @@ public class Level {
         int spawnY = groundY - TILE_SIZE;
 
         // Grundboden mit kleinen Lücken
-        for (int x = 0; x < 60; x++) {
+        for (int x = 0; x < 100; x++) {
             //if (x % 8 == 4 && index > 0) continue;
             tiles.add(new Tile(x * TILE_SIZE, groundY, TILE_SIZE, TILE_SIZE, groundTexture));
         }
@@ -164,9 +164,11 @@ public class Level {
                 tiles.add(new Tile(37 * TILE_SIZE + i * TILE_SIZE, (int) (groundY - TILE_SIZE - i * 0.5 * TILE_SIZE), TILE_SIZE, TILE_SIZE, blockTexture));
             }
 
+            tiles.add(new Tile(46 * TILE_SIZE, groundY - 3 * PLAYER_HEIGHT + TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
+
             level.enemyPositions = new int[][]{{13 * TILE_SIZE, spawnY}, {22 * TILE_SIZE, spawnY}, {28 * TILE_SIZE, spawnY}, {34 * TILE_SIZE, spawnY}, {40 * TILE_SIZE, spawnY}};
 
-            level.endX = 49 * TILE_SIZE;
+            level.endX = 46 * TILE_SIZE;
             level.endY = groundY - 3 * PLAYER_HEIGHT;
         }
 
@@ -255,6 +257,8 @@ public class Level {
             tiles.add(new Tile(72 * TILE_SIZE, groundY - TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
             tiles.add(new Tile(72 * TILE_SIZE, groundY - 2 * TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
             tiles.add(new Tile(74 * TILE_SIZE, groundY - 3 * TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
+
+            tiles.add(new Tile(76 * TILE_SIZE, groundY - 4 * TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
 
             level.enemyPositions = new int[][]{{15 * TILE_SIZE, spawnY}, {30 * TILE_SIZE, spawnY}, {47 * TILE_SIZE, spawnY}};
             level.endX = 76 * TILE_SIZE;
@@ -384,17 +388,17 @@ public class Level {
 
         // Basis
         g.setColor(new Color(50, 50, 50));
-        g.fillRect((int) (flagOffsetX - (10 * Zoom.SCALE)), endY + TILE_SIZE - poleBaseHeight, poleBaseWidth, poleBaseHeight);
+        g.fillRect(flagOffsetX, endY + TILE_SIZE - poleBaseHeight, poleBaseWidth, poleBaseHeight);
 
         // Mast
         g.setColor(new Color(200, 200, 200));
-        g.fillRect((int) (flagOffsetX + (3 * Zoom.SCALE)), endY + TILE_SIZE - poleBaseHeight - poleMastHeight, poleMastWidth, poleMastHeight);
+        g.fillRect((int) (flagOffsetX + (12 * Zoom.SCALE)), endY + TILE_SIZE - poleBaseHeight - poleMastHeight, poleMastWidth, poleMastHeight);
 
         // Flagge
         g.setColor(Color.RED);
-        g.fillRect((int) (flagOffsetX + (7 * Zoom.SCALE)), endY + TILE_SIZE - poleBaseHeight - poleMastHeight, flagWidth, flagHeight);
+        g.fillRect((int) (flagOffsetX + (12 * Zoom.SCALE)), endY + TILE_SIZE - poleBaseHeight - poleMastHeight, flagWidth, flagHeight);
         g.setColor(Color.BLACK);
-        g.drawRect((int) (flagOffsetX + (7 * Zoom.SCALE)), endY + TILE_SIZE - poleBaseHeight - poleMastHeight, flagWidth, flagHeight);
+        g.drawRect((int) (flagOffsetX + (12 * Zoom.SCALE)), endY + TILE_SIZE - poleBaseHeight - poleMastHeight, flagWidth, flagHeight);
     }
 
     public ArrayList<Tile> getSolidTiles() {

@@ -15,7 +15,7 @@ public class Game {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        frame.setResizable(true); // nur zum Testen
+  //     frame.setResizable(true); // nur zum Testen
 
         panel.startGame();
     }
