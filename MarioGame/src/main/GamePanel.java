@@ -212,7 +212,7 @@ public class GamePanel extends JPanel implements ActionListener {
                         player.bounceAfterStomp();
                     } else {
                         lives--;
-                        if (lives <= 0) state = GameState.GAME_OVER;
+                        if (lives <= 0) state = GameState.GAME_OVER_SCREEN;
                         else player.respawn();
                     }
                 }

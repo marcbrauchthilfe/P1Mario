@@ -7,7 +7,7 @@ import java.awt.*;
 public class LoadingScreens {
 
     private long startTime;
-    private final long duration = 1200; // 1.2 Sekunden Loading
+    private final long duration = 500; // 0.5 Sekunden Loading
 
     public void start() {
         startTime = System.currentTimeMillis();
