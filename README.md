@@ -1,5 +1,7 @@
 Bekannte Fehler:
 
+Level 4: Flagge einen näher, Block darunter
+
 Möhliche verbesserungen:
 1. Neu Texturen:
    a. Gegner (done)
@@ -7,7 +9,7 @@ Möhliche verbesserungen:
    c. Hintergrund (done)
    d. Thematisch passende MenuSceens
    
-3. Am Ende jedes Level ein Schloss oder ähnliches als Ziel und Barriere
+3. Am Ende jedes Level ein Schloss oder ähnliches als Ziel und Barriere: evtl. aus Tiles, neue Texturen
 
 4. Clean Code:
    a. Überflüssige/unused Klassen/funktionen entfernen
@@ -15,9 +17,9 @@ Möhliche verbesserungen:
    c. OPP
    d. ...
 
-6. Loading Sceens(als Inputbuffer)
-7. Localen un Globalen Score(Global = alle localen Scores) speichern (größtenteils done)
-8. Level erst nach und nach freischalten (Ralf)
+5. Loading Sceens(als Inputbuffer)
+6. Localen un Globalen Score(Global = alle localen Scores) speichern (größtenteils done)
+7. Level erst nach und nach freischalten (Ralf)
 
 
 
