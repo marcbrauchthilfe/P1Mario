@@ -5,7 +5,7 @@ import javax.swing.*;
 public class Game {
 
     public static void createAndShowGUI() {
-        JFrame frame = new JFrame("Platformer — Mario-Style (Simple)");
+        JFrame frame = new JFrame("Super Jump Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
 
