@@ -56,34 +56,34 @@ public class MenuManager {
             } else if (controlsBtn.contains(mx, my)) {
                 game.setGameState(GameState.CONTROLS_MENU_SCREEN);
             } else if (levelSelectBtn.contains(mx, my)) {
-                game.setGameState(GameState.LEVEL_SELECTION);
+                game.setGameState(GameState.LEVEL_SELECTION_SCREEN);
             } else if (quitBtn.contains(mx, my)) {
                 System.exit(0);
             }
-        } else if (GamePanel.state == GameState.LEVEL_SELECTION) {
+        } else if (GamePanel.state == GameState.LEVEL_SELECTION_SCREEN) {
             for (int i = 0; i < levelButtons.size(); i++) {
                 if (levelButtons.get(i).contains(mx, my)) {
                     game.loadSelectedLevel(i);
                     return;
                 }
             }
-        } else if (GamePanel.state == GameState.LEVEL_COMPLETE) {
+        } else if (GamePanel.state == GameState.LEVEL_COMPLETE_SCREEN) {
             game.setCurrentScore(0);
             if (continueBtn.contains(mx, my)) {
                 int next = game.getCurrentLevelIndex() + 1;
                 if (next >= storage.getTotalNumberOfLevels()) {
-                    game.setGameState(GameState.GAME_OVER);
+                    game.setGameState(GameState.GAME_OVER_SCREEN);
                 } else {
                     game.loadSelectedLevel(next);
                 }
             } else if (menuBtn.contains(mx, my)) {
-                game.setGameState(GameState.MENU_SCREEN);
+                game.showLoadingThen(GameState.MENU_SCREEN);
             }
-        } else if (GamePanel.state == GameState.GAME_OVER) {
+        } else if (GamePanel.state == GameState.GAME_OVER_SCREEN) {
             if (restartBtn.contains(mx, my)) {
                 game.restartLevel();  // definiere diese Methode im main.GamePanel
             } else if (menuBtn.contains(mx, my)) {
-                game.setGameState(GameState.MENU_SCREEN);
+                game.showLoadingThen(GameState.MENU_SCREEN);
             }
         }
     }
@@ -95,21 +95,21 @@ public class MenuManager {
     }
 
     public void handleEscape() {
-        if (GamePanel.state == GameState.RUNNING || GamePanel.state == GameState.START_LEVEL_SCREEN || GamePanel.state == GameState.LEVEL_COMPLETE || GamePanel.state == GameState.GAME_OVER || GamePanel.state == GameState.LEVEL_SELECTION || GamePanel.state == GameState.CONTROLS_MENU_SCREEN) {
-            game.setGameState(GameState.MENU_SCREEN);
+        if (GamePanel.state == GameState.RUNNING || GamePanel.state == GameState.START_LEVEL_SCREEN || GamePanel.state == GameState.LEVEL_COMPLETE_SCREEN || GamePanel.state == GameState.GAME_OVER_SCREEN || GamePanel.state == GameState.LEVEL_SELECTION_SCREEN || GamePanel.state == GameState.CONTROLS_MENU_SCREEN) {
+            game.showLoadingThen(GameState.MENU_SCREEN);
         }
     }
 
     public void draw(Graphics2D g) {
         if (GamePanel.state == GameState.MENU_SCREEN) {
             drawMainMenu(g);
-        } else if (GamePanel.state == GameState.LEVEL_SELECTION) {
+        } else if (GamePanel.state == GameState.LEVEL_SELECTION_SCREEN) {
             drawLevelSelection(g);
         } else if (GamePanel.state == GameState.CONTROLS_MENU_SCREEN) {
             drawControlsMenu(g);
-        } else if (GamePanel.state == GameState.LEVEL_COMPLETE) {
+        } else if (GamePanel.state == GameState.LEVEL_COMPLETE_SCREEN) {
             drawLevelComplete(g);
-        } else if (GamePanel.state == GameState.GAME_OVER) {
+        } else if (GamePanel.state == GameState.GAME_OVER_SCREEN) {
             drawGameOver(g);
         } else if (GamePanel.state == GameState.START_LEVEL_SCREEN) {
             drawStartLevel(g);

@@ -1,7 +1,9 @@
 package ui;
+import main.GamePanel;
+
 import java.awt.*;
 
-public class LoadingScreen {
+public class LoadingScreens {
 
     private long startTime;
     private final long duration = 1200; // 1.2 Sekunden Loading

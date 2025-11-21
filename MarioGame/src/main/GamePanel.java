@@ -5,6 +5,7 @@ import entities.Player;
 import levels.Level;
 import levels.MovingPlatform;
 import levels.Tile;
+import ui.LoadingScreens;
 import ui.MenuManager;
 import utils.GameState;
 
@@ -18,6 +19,7 @@ public class GamePanel extends JPanel implements ActionListener {
     private final MenuManager menuManager;
     private final Timer timer;
     private final Storage storage;
+    public final LoadingScreens loadingScreens;
     public static GameState state = GameState.MENU_SCREEN;
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
@@ -28,12 +30,14 @@ public class GamePanel extends JPanel implements ActionListener {
     private Player player;
     private ArrayList<Enemy> enemies;
     private Level level;
+    private GameState nextStateAfterLoading;
 
     public GamePanel() {
 
         menuManager = new MenuManager(this);
         timer = new Timer(16, this);
         storage = new Storage();
+        loadingScreens = new LoadingScreens();
 
         currentScore = 0;
         currentLevelIndex = 0;
@@ -167,7 +171,13 @@ public class GamePanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         double dt = timer.getDelay() / 1000.0;
-
+        if (state == GameState.LOADING) {
+            if (loadingScreens.isFinished()) {
+                state = nextStateAfterLoading;
+            }
+            repaint();
+            return;
+        }
         if (state == GameState.RUNNING && player != null) {
             if (left && !right) player.moveLeft();
             else if (right && !left) player.moveRight();
@@ -189,13 +199,13 @@ public class GamePanel extends JPanel implements ActionListener {
                         player.bounceAfterStomp();
                     } else {
                         lives--;
-                        if (lives <= 0) state = GameState.GAME_OVER;
+                        if (lives <= 0) state = GameState.GAME_OVER_SCREEN;
                         else player.respawn();
                     }
                 }
             }
             if (level.isEndReached(player)) {
-                state = GameState.LEVEL_COMPLETE;
+                state = GameState.LEVEL_COMPLETE_SCREEN;
                 if (currentScore >= storage.getLevelHighscores(currentLevelIndex)) {
                     storage.setLevelHighscores(currentLevelIndex, currentScore);
                 }
@@ -210,7 +220,7 @@ public class GamePanel extends JPanel implements ActionListener {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        if (state == GameState.RUNNING || state == GameState.START_LEVEL_SCREEN || state == GameState.LEVEL_COMPLETE || state == GameState.GAME_OVER) {
+        if (state == GameState.RUNNING || state == GameState.START_LEVEL_SCREEN || state == GameState.LEVEL_COMPLETE_SCREEN || state == GameState.GAME_OVER_SCREEN) {
 
             int camX = 0;
             if (player != null) {
@@ -226,6 +236,11 @@ public class GamePanel extends JPanel implements ActionListener {
 
             drawHUD(g2);
         }
+        if (state == GameState.LOADING) {
+            loadingScreens.draw(g2);
+            return;
+        }
+
         // Menü zeichnen
         menuManager.draw(g2);
     }
@@ -241,12 +256,18 @@ public class GamePanel extends JPanel implements ActionListener {
     public void setGameState(GameState newState) {
         state = newState;
 
-        if (state == GameState.MENU_SCREEN || state == GameState.LEVEL_SELECTION || state == GameState.CONTROLS_MENU_SCREEN) {
+        if (state == GameState.MENU_SCREEN || state == GameState.LEVEL_SELECTION_SCREEN || state == GameState.CONTROLS_MENU_SCREEN) {
             if (timer.isRunning()) timer.stop();
         } else if (state == GameState.START_LEVEL_SCREEN || state == GameState.RUNNING) {
             if (!timer.isRunning()) timer.start();
         }
     }
+    public void showLoadingThen(GameState nextState) {
+        nextStateAfterLoading = nextState;
+        loadingScreens.start();
+        state = GameState.LOADING;
+    }
+
 
     public void restartLevel() {
         lives = 3;

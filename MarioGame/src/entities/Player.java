@@ -136,7 +136,7 @@ public class Player {
         if (y > level.getHeight() + 300) {
             GamePanel.subLive();
             if (GamePanel.lives <= 0) {
-                GamePanel.state = GameState.GAME_OVER;
+                GamePanel.state = GameState.GAME_OVER_SCREEN;
             } else {
                 respawn();
             }
