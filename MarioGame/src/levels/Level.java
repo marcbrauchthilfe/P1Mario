@@ -163,12 +163,12 @@ public class Level {
                 tiles.add(new Tile(37 * TILE_SIZE + i * TILE_SIZE, (int) (groundY - TILE_SIZE - i * 0.5 * TILE_SIZE), TILE_SIZE, TILE_SIZE, blockTexture));
             }
 
-            tiles.add(new Tile(46 * TILE_SIZE, groundY - 3 * PLAYER_HEIGHT + TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
+            tiles.add(new Tile(46 * TILE_SIZE, groundY - 3 * PLAYER_HEIGHT + 2 * TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
 
             level.enemyPositions = new int[][]{{13 * TILE_SIZE, spawnY, 0}, {22 * TILE_SIZE, spawnY, 1}, {28 * TILE_SIZE, spawnY, 1}, {34 * TILE_SIZE, spawnY, 1}, {43 * TILE_SIZE, spawnY, 0}};
 
             level.endX = 46 * TILE_SIZE;
-            level.endY = groundY - 3 * PLAYER_HEIGHT;
+            level.endY = groundY - 3 * PLAYER_HEIGHT + TILE_SIZE;
         }
 
         // -------

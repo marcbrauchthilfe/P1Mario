@@ -17,14 +17,14 @@ import java.util.ArrayList;
 
 public class GamePanel extends JPanel implements ActionListener {
 
+    public static final int WIDTH = 800;
+    public static final int HEIGHT = 600;
+    public static GameState state = GameState.MENU_SCREEN;
+    public static int lives = 3;
+    public final LoadingScreens loadingScreens;
     private final MenuManager menuManager;
     private final Timer timer;
     private final Storage storage;
-    public final LoadingScreens loadingScreens;
-    public static GameState state = GameState.MENU_SCREEN;
-    public static final int WIDTH = 800;
-    public static final int HEIGHT = 600;
-    public static int lives = 3;
     private int currentLevelIndex;
     private int currentScore;
     private boolean left, right;
@@ -200,37 +200,13 @@ public class GamePanel extends JPanel implements ActionListener {
 
             player.update(dt);
 
-            for (MovingEnemy en : new ArrayList<>(movingEnemies)) en.update();
-
             for (Enemy en : new ArrayList<>(enemies)) en.update();
+            for (Enemy en : new ArrayList<>(movingEnemies)) en.update();
 
-            for (MovingEnemy en : new ArrayList<>(movingEnemies)) {
-                if (player.getBounds().intersects(en.getBounds())) {
-                    if (player.isFalling() && player.getY() < en.getY()) {
-                        movingEnemies.remove(en);
-                        currentScore += 100;
-                        player.bounceAfterStomp();
-                    } else {
-                        lives--;
-                        if (lives <= 0) state = GameState.GAME_OVER;
-                        else player.respawn();
-                    }
-                }
-            }
 
-            for (Enemy en : new ArrayList<>(enemies)) {
-                if (player.getBounds().intersects(en.getBounds())) {
-                    if (player.isFalling() && player.getY() < en.getY()) {
-                        enemies.remove(en);
-                        currentScore += 100;
-                        player.bounceAfterStomp();
-                    } else {
-                        lives--;
-                        if (lives <= 0) state = GameState.GAME_OVER_SCREEN;
-                        else player.respawn();
-                    }
-                }
-            }
+            for (Enemy en : new ArrayList<>(enemies)) handleEnemyCollision(en);
+            for (Enemy en : new ArrayList<>(movingEnemies)) handleEnemyCollision(en);
+
 
             if (level.isEndReached(player)) {
                 state = GameState.LEVEL_COMPLETE_SCREEN;
@@ -283,15 +259,16 @@ public class GamePanel extends JPanel implements ActionListener {
         g2.drawString("Level: " + (currentLevelIndex + 1), 700, 20);
     }
 
-    public void setGameState(GameState newState) {
-        state = newState;
+//    public void setGameState(GameState newState) {
+//        state = newState;
+//
+//        if (state == GameState.MENU_SCREEN || state == GameState.LEVEL_SELECTION_SCREEN || state == GameState.CONTROLS_MENU_SCREEN) {
+//            if (timer.isRunning()) timer.stop();
+//        } else if (state == GameState.START_LEVEL_SCREEN || state == GameState.RUNNING) {
+//            if (!timer.isRunning()) timer.start();
+//        }
+//    }
 
-        if (state == GameState.MENU_SCREEN || state == GameState.LEVEL_SELECTION_SCREEN || state == GameState.CONTROLS_MENU_SCREEN) {
-            if (timer.isRunning()) timer.stop();
-        } else if (state == GameState.START_LEVEL_SCREEN || state == GameState.RUNNING) {
-            if (!timer.isRunning()) timer.start();
-        }
-    }
     public void showLoadingThen(GameState nextState) {
         nextStateAfterLoading = nextState;
         loadingScreens.start();
@@ -307,9 +284,33 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public int getCurrentScore() {
-        return  currentScore;
+        return currentScore;
     }
+
     public void setCurrentScore(int currentScore) {
         this.currentScore = currentScore;
     }
+
+    private void handleEnemyCollision(Enemy en) {
+        if (!player.getBounds().intersects(en.getBounds())) return;
+
+        // Spieler springt von oben auf den Gegner
+        if (player.isFalling() && player.getY() < en.getY()) {
+            removeEnemy(en);
+            currentScore += 100;
+            player.bounceAfterStomp();
+            return;
+        }
+
+        // Spieler wird getroffen
+        lives--;
+        if (lives <= 0) state = GameState.GAME_OVER_SCREEN;
+        else player.respawn();
+    }
+
+    private void removeEnemy(Enemy en) {
+        enemies.remove(en);
+        movingEnemies.remove(en);
+    }
+
 }
