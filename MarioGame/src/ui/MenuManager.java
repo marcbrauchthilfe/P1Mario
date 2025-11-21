@@ -72,7 +72,7 @@ public class MenuManager {
             game.setCurrentScore(0);
             if (continueBtn.contains(mx, my)) {
                 int next = game.getCurrentLevelIndex() + 1;
-                if (next >= Level.NUM_LEVELS) {
+                if (next >= storage.getTotalNumberOfLevels()) {
                     game.setGameState(GameState.GAME_OVER);
                 } else {
                     game.loadSelectedLevel(next);
@@ -150,7 +150,7 @@ public class MenuManager {
 
         g.setFont(new Font("SansSerif", Font.BOLD, 20));
         g.setColor(Color.YELLOW);
-        g.drawString("Total Score: " + Storage.getTotalScore(), 10, 50);
+        g.drawString("Total Score: " + storage.getTotalScore(), 10, 50);
     }
 
     private void drawLevelSelection(Graphics2D g) {
@@ -168,7 +168,7 @@ public class MenuManager {
         int buttonHeight = 60;
         int gap = 20;
 
-        int totalLevels = Level.NUM_LEVELS;
+        int totalLevels = storage.getTotalNumberOfLevels();
         int rows = (int) Math.ceil(totalLevels / (double) columns);
 
         int gridWidth = columns * (buttonWidth + gap) - gap;

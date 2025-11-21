@@ -11,7 +11,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class Level {
-    public static final int NUM_LEVELS = 8;
     private static final int BASE_TILE_SIZE = 32;
     // TILE_SIZE wird korrekt mit dem Skalierungsfaktor multipliziert
     public static final int TILE_SIZE = (int) (BASE_TILE_SIZE * Zoom.SCALE);
