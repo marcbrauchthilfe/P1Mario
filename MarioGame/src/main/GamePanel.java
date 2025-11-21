@@ -55,6 +55,10 @@ public class GamePanel extends JPanel implements ActionListener {
         lives--;
     }
 
+    public static void setlives(int lives) {
+        GamePanel.lives = lives;
+    }
+
     private void setupMouse() {
         addMouseListener(new MouseAdapter() {
             @Override

@@ -50,7 +50,7 @@ public class MenuManager {
     public void handleMousePressed(int mx, int my) {
 
         if (GamePanel.state == GameState.MENU_SCREEN) {
-            // Hauptmenü
+            GamePanel.setlives(3);
             if (startBtn.contains(mx, my)) {
 
                 game.loadSelectedLevel(game.getCurrentLevelIndex());
@@ -63,6 +63,7 @@ public class MenuManager {
                 System.exit(0);
             }
         } else if (GamePanel.state == GameState.LEVEL_SELECTION_SCREEN) {
+            GamePanel.setlives(3);
             for (int i = 0; i < levelButtons.size(); i++) {
                 if (levelButtons.get(i).contains(mx, my)) {
                     game.loadSelectedLevel(i);
@@ -71,6 +72,7 @@ public class MenuManager {
                 }
             }
         } else if (GamePanel.state == GameState.LEVEL_COMPLETE_SCREEN) {
+            GamePanel.setlives(3);
             game.setCurrentScore(0);
             if (continueBtn.contains(mx, my)) {
                 int next = game.getCurrentLevelIndex() + 1;
@@ -84,6 +86,7 @@ public class MenuManager {
                 game.showLoadingThen(GameState.MENU_SCREEN);
             }
         } else if (GamePanel.state == GameState.GAME_OVER_SCREEN) {
+            GamePanel.setlives(3);
             if (restartBtn.contains(mx, my)) {
                 game.restartLevel();  // definiere diese Methode im main.GamePanel
             } else if (menuBtn.contains(mx, my)) {

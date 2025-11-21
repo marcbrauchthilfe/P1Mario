@@ -5,7 +5,6 @@ import main.GamePanel;
 import java.awt.*;
 
 public class LoadingScreens {
-
     private long startTime;
     private final long duration = 500; // 0.5 Sekunden Loading
 
