@@ -1,6 +1,5 @@
 package ui;
 
-import levels.Level;
 import main.GamePanel;
 import main.Storage;
 import utils.GameState;
@@ -50,12 +49,12 @@ public class MenuManager {
 
     public void handleMousePressed(int mx, int my) {
 
-        if (GamePanel.state == GameState.MENU) {
+        if (GamePanel.state == GameState.MENU_SCREEN) {
             // Hauptmenü
             if (startBtn.contains(mx, my)) {
                 game.loadSelectedLevel(game.getCurrentLevelIndex());
             } else if (controlsBtn.contains(mx, my)) {
-                game.setGameState(GameState.CONTROLS_MENU);
+                game.setGameState(GameState.CONTROLS_MENU_SCREEN);
             } else if (levelSelectBtn.contains(mx, my)) {
                 game.setGameState(GameState.LEVEL_SELECTION);
             } else if (quitBtn.contains(mx, my)) {
@@ -78,41 +77,41 @@ public class MenuManager {
                     game.loadSelectedLevel(next);
                 }
             } else if (menuBtn.contains(mx, my)) {
-                game.setGameState(GameState.MENU);
+                game.setGameState(GameState.MENU_SCREEN);
             }
         } else if (GamePanel.state == GameState.GAME_OVER) {
             if (restartBtn.contains(mx, my)) {
                 game.restartLevel();  // definiere diese Methode im main.GamePanel
             } else if (menuBtn.contains(mx, my)) {
-                game.setGameState(GameState.MENU);
+                game.setGameState(GameState.MENU_SCREEN);
             }
         }
     }
 
     public void handleEnter() {
-        if (GamePanel.state == GameState.START_LEVEL) {
+        if (GamePanel.state == GameState.START_LEVEL_SCREEN) {
             game.setGameState(GameState.RUNNING);
         }
     }
 
     public void handleEscape() {
-        if (GamePanel.state == GameState.RUNNING || GamePanel.state == GameState.START_LEVEL || GamePanel.state == GameState.LEVEL_COMPLETE || GamePanel.state == GameState.GAME_OVER || GamePanel.state == GameState.LEVEL_SELECTION || GamePanel.state == GameState.CONTROLS_MENU) {
-            game.setGameState(GameState.MENU);
+        if (GamePanel.state == GameState.RUNNING || GamePanel.state == GameState.START_LEVEL_SCREEN || GamePanel.state == GameState.LEVEL_COMPLETE || GamePanel.state == GameState.GAME_OVER || GamePanel.state == GameState.LEVEL_SELECTION || GamePanel.state == GameState.CONTROLS_MENU_SCREEN) {
+            game.setGameState(GameState.MENU_SCREEN);
         }
     }
 
     public void draw(Graphics2D g) {
-        if (GamePanel.state == GameState.MENU) {
+        if (GamePanel.state == GameState.MENU_SCREEN) {
             drawMainMenu(g);
         } else if (GamePanel.state == GameState.LEVEL_SELECTION) {
             drawLevelSelection(g);
-        } else if (GamePanel.state == GameState.CONTROLS_MENU) {
+        } else if (GamePanel.state == GameState.CONTROLS_MENU_SCREEN) {
             drawControlsMenu(g);
         } else if (GamePanel.state == GameState.LEVEL_COMPLETE) {
             drawLevelComplete(g);
         } else if (GamePanel.state == GameState.GAME_OVER) {
             drawGameOver(g);
-        } else if (GamePanel.state == GameState.START_LEVEL) {
+        } else if (GamePanel.state == GameState.START_LEVEL_SCREEN) {
             drawStartLevel(g);
         }
     }

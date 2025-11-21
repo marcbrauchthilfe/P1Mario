@@ -18,7 +18,7 @@ public class GamePanel extends JPanel implements ActionListener {
     private final MenuManager menuManager;
     private final Timer timer;
     private final Storage storage;
-    public static GameState state = GameState.MENU;
+    public static GameState state = GameState.MENU_SCREEN;
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
     public static int lives = 3;
@@ -156,7 +156,7 @@ public class GamePanel extends JPanel implements ActionListener {
             enemies.add(new Enemy(p[0], p[1], level));
         }
 
-        state = GameState.START_LEVEL;
+        state = GameState.START_LEVEL_SCREEN;
         if (!timer.isRunning()) timer.start();
     }
 
@@ -210,7 +210,7 @@ public class GamePanel extends JPanel implements ActionListener {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        if (state == GameState.RUNNING || state == GameState.START_LEVEL || state == GameState.LEVEL_COMPLETE || state == GameState.GAME_OVER) {
+        if (state == GameState.RUNNING || state == GameState.START_LEVEL_SCREEN || state == GameState.LEVEL_COMPLETE || state == GameState.GAME_OVER) {
 
             int camX = 0;
             if (player != null) {
@@ -241,9 +241,9 @@ public class GamePanel extends JPanel implements ActionListener {
     public void setGameState(GameState newState) {
         state = newState;
 
-        if (state == GameState.MENU || state == GameState.LEVEL_SELECTION || state == GameState.CONTROLS_MENU) {
+        if (state == GameState.MENU_SCREEN || state == GameState.LEVEL_SELECTION || state == GameState.CONTROLS_MENU_SCREEN) {
             if (timer.isRunning()) timer.stop();
-        } else if (state == GameState.START_LEVEL || state == GameState.RUNNING) {
+        } else if (state == GameState.START_LEVEL_SCREEN || state == GameState.RUNNING) {
             if (!timer.isRunning()) timer.start();
         }
     }
@@ -252,7 +252,7 @@ public class GamePanel extends JPanel implements ActionListener {
         lives = 3;
         currentScore = 0;
         loadSelectedLevel(currentLevelIndex);
-        state = GameState.START_LEVEL;
+        state = GameState.START_LEVEL_SCREEN;
     }
 
     public int getCurrentScore() {
