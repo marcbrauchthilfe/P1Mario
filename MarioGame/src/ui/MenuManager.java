@@ -73,17 +73,18 @@ public class MenuManager {
             }
         } else if (GamePanel.state == GameState.LEVEL_COMPLETE_SCREEN) {
             GamePanel.setlives(3);
-            game.setCurrentScore(0);
             if (continueBtn.contains(mx, my)) {
                 int next = game.getCurrentLevelIndex() + 1;
                 if (next >= storage.getTotalNumberOfLevels()) {
                     game.showLoadingThen(GameState.GAME_OVER_SCREEN);
+                    game.setCurrentScore(0);
                 } else {
                     game.loadSelectedLevel(next);
                     game.showLoadingThen(GameState.RUNNING);
                 }
             } else if (menuBtn.contains(mx, my)) {
                 game.showLoadingThen(GameState.MENU_SCREEN);
+                game.setCurrentScore(0);
             }
         } else if (GamePanel.state == GameState.GAME_OVER_SCREEN) {
             GamePanel.setlives(3);
