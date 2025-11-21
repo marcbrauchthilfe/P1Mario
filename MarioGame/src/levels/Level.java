@@ -78,7 +78,7 @@ public class Level {
                 tiles.add(new Tile(x * TILE_SIZE, groundY - (x - 38) * rampStep - rampStep, TILE_SIZE, rampStep, blockTexture));
             }
 
-            level.enemyPositions = new int[][]{{14 * TILE_SIZE, spawnY, 1}, {22 * TILE_SIZE, spawnY, 0}, {30 * TILE_SIZE, spawnY, 0}};
+            level.enemyPositions = new int[][]{{14 * TILE_SIZE, spawnY, 0}, {26 * TILE_SIZE, spawnY, 0}, {32 * TILE_SIZE, spawnY, 0}};
 
             level.endX = 48 * TILE_SIZE;
             level.endY = groundY - TILE_SIZE;
@@ -105,7 +105,7 @@ public class Level {
             tiles.add(new Tile(38 * TILE_SIZE, groundY - 2 * TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
             tiles.add(new Tile(40 * TILE_SIZE, groundY - TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
 
-            level.enemyPositions = new int[][]{{10 * TILE_SIZE, spawnY, 1}, {17 * TILE_SIZE, spawnY, 1}, {26 * TILE_SIZE, spawnY, 1}, {34 * TILE_SIZE, spawnY, 1}};
+            level.enemyPositions = new int[][]{{12 * TILE_SIZE, spawnY, 0}, {17 * TILE_SIZE, spawnY, 0}, {26 * TILE_SIZE, spawnY, 1}, {34 * TILE_SIZE, spawnY, 0}};
 
             level.endX = 48 * TILE_SIZE;
             level.endY = groundY - TILE_SIZE;
@@ -138,7 +138,7 @@ public class Level {
             tiles.add(new Tile(32 * TILE_SIZE, groundY - TILE_SIZE - PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
             tiles.add(new Tile(49 * TILE_SIZE, groundY - TILE_SIZE, TILE_SIZE, TILE_SIZE, null));
 
-            level.enemyPositions = new int[][]{{11 * TILE_SIZE, spawnY, 1}, {22 * TILE_SIZE, spawnY, 1}, {29 * TILE_SIZE, spawnY, 1}, {38 * TILE_SIZE, spawnY, 1}};
+            level.enemyPositions = new int[][]{{11 * TILE_SIZE, spawnY, 1}, {22 * TILE_SIZE, spawnY, 0}, {29 * TILE_SIZE, spawnY, 0}, {38 * TILE_SIZE, spawnY, 1}};
 
             level.endX = 48 * TILE_SIZE;
             level.endY = groundY - TILE_SIZE;
@@ -166,7 +166,7 @@ public class Level {
 
             tiles.add(new Tile(46 * TILE_SIZE, groundY - 3 * PLAYER_HEIGHT + TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
 
-            level.enemyPositions = new int[][]{{13 * TILE_SIZE, spawnY, 1}, {22 * TILE_SIZE, spawnY, 1}, {28 * TILE_SIZE, spawnY, 1}, {34 * TILE_SIZE, spawnY, 1}, {40 * TILE_SIZE, spawnY, 1}};
+            level.enemyPositions = new int[][]{{13 * TILE_SIZE, spawnY, 0}, {22 * TILE_SIZE, spawnY, 1}, {28 * TILE_SIZE, spawnY, 1}, {34 * TILE_SIZE, spawnY, 1}, {43 * TILE_SIZE, spawnY, 0}};
 
             level.endX = 46 * TILE_SIZE;
             level.endY = groundY - 3 * PLAYER_HEIGHT;
