@@ -122,7 +122,7 @@ public class MenuManager {
         } else if (GamePanel.state == GameState.GAME_OVER_SCREEN) {
             drawGameOver(g);
         } else if (GamePanel.state == GameState.START_LEVEL_SCREEN) {
-            drawStartLevel(g);
+            game.showLoadingThen(GameState.RUNNING);
         }
 
     }
@@ -265,17 +265,5 @@ public class MenuManager {
         g.setFont(new Font("Arial", Font.PLAIN, 32));
         drawButton(g, restartBtn, "Restart ");
         drawButton(g, menuBtn, "Main Menu ");
-    }
-
-    private void drawStartLevel(Graphics2D g) {
-        g.setColor(Color.BLACK);
-        g.setFont(new Font("Arial", Font.BOLD, 36));
-        String msg = "PRESS ENTER TO START LEVEL";
-        int x = (GamePanel.WIDTH - g.getFontMetrics().stringWidth(msg)) / 2;
-        int y = GamePanel.HEIGHT / 2;
-        g.setColor(Color.WHITE);
-        g.fillRect(x - 10, y - 30, g.getFontMetrics().stringWidth(msg) + 20, 40);
-        g.setColor(Color.BLACK);
-        g.drawString(msg, x, y);
     }
 }
