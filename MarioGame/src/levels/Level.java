@@ -36,7 +36,7 @@ public class Level {
     private final int width;
     private final int height;
     private ArrayList<Tile> solidTiles = new ArrayList<>();
-    private int[][][] enemyPositions;
+    private int[][] enemyPositions;
     private int endX, endY;
 
     // Konstruktor ist jetzt nur für die Level-Dimensionen zuständig
@@ -78,7 +78,7 @@ public class Level {
                 tiles.add(new Tile(x * TILE_SIZE, groundY - (x - 38) * rampStep - rampStep, TILE_SIZE, rampStep, blockTexture));
             }
 
-            level.enemyPositions = new int[][][]{{{14 * TILE_SIZE}, {spawnY}, {1}}, {{22 * TILE_SIZE}, {spawnY}, {1}}, {{30 * TILE_SIZE}, {spawnY}, {1}}};
+            level.enemyPositions = new int[][]{{14 * TILE_SIZE, spawnY, 1}, {22 * TILE_SIZE, spawnY, 0}, {30 * TILE_SIZE, spawnY, 0}};
 
             level.endX = 48 * TILE_SIZE;
             level.endY = groundY - TILE_SIZE;
@@ -105,7 +105,7 @@ public class Level {
             tiles.add(new Tile(38 * TILE_SIZE, groundY - 2 * TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
             tiles.add(new Tile(40 * TILE_SIZE, groundY - TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
 
-            level.enemyPositions = new int[][][]{{{10 * TILE_SIZE}, {spawnY}, {1}}, {{17 * TILE_SIZE}, {spawnY}, {1}}, {{26 * TILE_SIZE}, {spawnY}, {1}}, {{34 * TILE_SIZE}, {spawnY}, {1}}};
+            level.enemyPositions = new int[][]{{10 * TILE_SIZE, spawnY, 1}, {17 * TILE_SIZE, spawnY, 1}, {26 * TILE_SIZE, spawnY, 1}, {34 * TILE_SIZE, spawnY, 1}};
 
             level.endX = 48 * TILE_SIZE;
             level.endY = groundY - TILE_SIZE;
@@ -138,7 +138,7 @@ public class Level {
             tiles.add(new Tile(32 * TILE_SIZE, groundY - TILE_SIZE - PLAYER_HEIGHT, TILE_SIZE, TILE_SIZE, blockTexture));
             tiles.add(new Tile(49 * TILE_SIZE, groundY - TILE_SIZE, TILE_SIZE, TILE_SIZE, null));
 
-            level.enemyPositions = new int[][]{{11 * TILE_SIZE, spawnY}, {22 * TILE_SIZE, spawnY}, {29 * TILE_SIZE, spawnY}, {38 * TILE_SIZE, spawnY}};
+            level.enemyPositions = new int[][]{{11 * TILE_SIZE, spawnY, 1}, {22 * TILE_SIZE, spawnY, 1}, {29 * TILE_SIZE, spawnY, 1}, {38 * TILE_SIZE, spawnY, 1}};
 
             level.endX = 48 * TILE_SIZE;
             level.endY = groundY - TILE_SIZE;
@@ -166,7 +166,7 @@ public class Level {
 
             tiles.add(new Tile(46 * TILE_SIZE, groundY - 3 * PLAYER_HEIGHT + TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
 
-            level.enemyPositions = new int[][]{{13 * TILE_SIZE, spawnY}, {22 * TILE_SIZE, spawnY}, {28 * TILE_SIZE, spawnY}, {34 * TILE_SIZE, spawnY}, {40 * TILE_SIZE, spawnY}};
+            level.enemyPositions = new int[][]{{13 * TILE_SIZE, spawnY, 1}, {22 * TILE_SIZE, spawnY, 1}, {28 * TILE_SIZE, spawnY, 1}, {34 * TILE_SIZE, spawnY, 1}, {40 * TILE_SIZE, spawnY, 1}};
 
             level.endX = 46 * TILE_SIZE;
             level.endY = groundY - 3 * PLAYER_HEIGHT;
@@ -212,7 +212,7 @@ public class Level {
             }
             //tiles.add(new levels.Tile(80 * TILE_SIZE, groundY - 6 * TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture)); // Flag base
 
-            level.enemyPositions = new int[][]{{13 * TILE_SIZE, spawnY}, {34 * TILE_SIZE, spawnY}};
+            level.enemyPositions = new int[][]{{13 * TILE_SIZE, spawnY, 1}, {34 * TILE_SIZE, spawnY, 1}};
             level.endX = 80 * TILE_SIZE;
             level.endY = groundY - TILE_SIZE;
         }
@@ -260,7 +260,7 @@ public class Level {
 
             tiles.add(new Tile(76 * TILE_SIZE, groundY - 4 * TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
 
-            level.enemyPositions = new int[][]{{15 * TILE_SIZE, spawnY}, {30 * TILE_SIZE, spawnY}, {47 * TILE_SIZE, spawnY}};
+            level.enemyPositions = new int[][]{{15 * TILE_SIZE, spawnY, 1}, {30 * TILE_SIZE, spawnY, 1}, {47 * TILE_SIZE, spawnY, 1}};
             level.endX = 76 * TILE_SIZE;
             level.endY = groundY - 5 * TILE_SIZE;
         }
@@ -296,7 +296,7 @@ public class Level {
             tiles.add(new Tile(55 * TILE_SIZE, groundY - 15 * TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
             tiles.add(new Tile(56 * TILE_SIZE, groundY - 15 * TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture)); // flag base
 
-            level.enemyPositions = new int[][][]{{{13 * TILE_SIZE}, {groundY - 2 * TILE_SIZE}, {1}}, {{49 * TILE_SIZE}, {groundY - 6 * TILE_SIZE}, {1}}};
+            level.enemyPositions = new int[][]{{13 * TILE_SIZE, groundY - 2 * TILE_SIZE, 0}, {49 * TILE_SIZE, groundY - 6 * TILE_SIZE, 0}};
             level.endX = 56 * TILE_SIZE;
             level.endY = groundY - 16 * TILE_SIZE;
         }
@@ -319,17 +319,17 @@ public class Level {
 
             // 3) Vertikale Fahrstühle (essenziell) — zwei Etagen hoch
             tiles.add(new MovingPlatform(20 * TILE_SIZE, groundY - 2 * TILE_SIZE, TILE_SIZE, TILE_SIZE, 20 * TILE_SIZE, groundY - 8 * TILE_SIZE, Zoom.SCALE, blockTexture)); // elevator A
-            tiles.add(new MovingPlatform(24 * TILE_SIZE, groundY - 3 * TILE_SIZE, TILE_SIZE, TILE_SIZE, 24 * TILE_SIZE, groundY - 10 * TILE_SIZE, 1.1 * Zoom.SCALE, blockTexture)); // elevator B
+            tiles.add(new MovingPlatform(24 * TILE_SIZE, groundY - 3 * TILE_SIZE, TILE_SIZE, TILE_SIZE, 24 * TILE_SIZE, groundY - 11 * TILE_SIZE, 1.4 * Zoom.SCALE, blockTexture)); // elevator B
 
             // 4) Horizontal movers zwischen Etagen (Chain required)
-            tiles.add(new MovingPlatform(22 * TILE_SIZE, groundY - 6 * TILE_SIZE, TILE_SIZE, TILE_SIZE, 26 * TILE_SIZE, groundY - 6 * TILE_SIZE, 1.6 * Zoom.SCALE, blockTexture));
-            tiles.add(new MovingPlatform(26 * TILE_SIZE, groundY - 7 * TILE_SIZE, TILE_SIZE, TILE_SIZE, 22 * TILE_SIZE, groundY - 7 * TILE_SIZE, 1.6 * Zoom.SCALE, blockTexture));
+            tiles.add(new MovingPlatform(21 * TILE_SIZE, groundY - 7 * TILE_SIZE, TILE_SIZE, TILE_SIZE, 27 * TILE_SIZE, groundY - 7 * TILE_SIZE, 1.4 * Zoom.SCALE, blockTexture));
+            tiles.add(new MovingPlatform(27 * TILE_SIZE, groundY - 8 * TILE_SIZE, TILE_SIZE, TILE_SIZE, 21 * TILE_SIZE, groundY - 8 * TILE_SIZE, 1.4 * Zoom.SCALE, blockTexture));
 
             // 5) Obere Plattformen + finale Flagge (hoch)
             tiles.add(new Tile(27 * TILE_SIZE, groundY - 12 * TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
             tiles.add(new Tile(27 * TILE_SIZE + TILE_SIZE, groundY - 12 * TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture)); // flag base
 
-            level.enemyPositions = new int[][][]{{{11 * TILE_SIZE}, {groundY - 4 * TILE_SIZE}, {1}}, {{23 * TILE_SIZE}, {groundY - 6 * TILE_SIZE}, {1}}, {{25 * TILE_SIZE}, {groundY - 3 * TILE_SIZE}, {1}}};
+            level.enemyPositions = new int[][]{{11 * TILE_SIZE, groundY - 4 * TILE_SIZE, 0}, {24 * TILE_SIZE, groundY - 4 * TILE_SIZE, 0}};
             level.endX = 27 * TILE_SIZE + TILE_SIZE;
             level.endY = groundY - 13 * TILE_SIZE;
         }
@@ -405,7 +405,7 @@ public class Level {
         return solidTiles;
     }
 
-    public int[][][] getEnemyPositions() {
+    public int[][] getEnemyPositions() {
         return enemyPositions;
     }
 

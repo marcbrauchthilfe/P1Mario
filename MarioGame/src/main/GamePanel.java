@@ -155,11 +155,11 @@ public class GamePanel extends JPanel implements ActionListener {
 
         enemies = new ArrayList<>();
         movingEnemies = new ArrayList<>();
-        for (int[][] p : level.getEnemyPositions()) {
-            if (p[0][0] == 1) {
-                movingEnemies.add(new MovingEnemy(p[0][0], p[1][0], level));
+        for (int[] p : level.getEnemyPositions()) {
+            if (p[2] == 1) {
+                movingEnemies.add(new MovingEnemy(p[0], p[1], level));
             } else {
-                enemies.add(new Enemy(p[0][0], p[1][0], level));
+                enemies.add(new Enemy(p[0], p[1], level));
             }
         }
 
@@ -188,7 +188,23 @@ public class GamePanel extends JPanel implements ActionListener {
 
             for (MovingEnemy en : new ArrayList<>(movingEnemies)) en.update();
 
+            for (Enemy en : new ArrayList<>(enemies)) en.update();
+
             for (MovingEnemy en : new ArrayList<>(movingEnemies)) {
+                if (player.getBounds().intersects(en.getBounds())) {
+                    if (player.isFalling() && player.getY() < en.getY()) {
+                        movingEnemies.remove(en);
+                        currentScore += 100;
+                        player.bounceAfterStomp();
+                    } else {
+                        lives--;
+                        if (lives <= 0) state = GameState.GAME_OVER;
+                        else player.respawn();
+                    }
+                }
+            }
+
+            for (Enemy en : new ArrayList<>(enemies)) {
                 if (player.getBounds().intersects(en.getBounds())) {
                     if (player.isFalling() && player.getY() < en.getY()) {
                         enemies.remove(en);
@@ -201,6 +217,7 @@ public class GamePanel extends JPanel implements ActionListener {
                     }
                 }
             }
+
             if (level.isEndReached(player)) {
                 state = GameState.LEVEL_COMPLETE;
                 if (currentScore > storage.getLevelHighscores()[currentLevelIndex]) {

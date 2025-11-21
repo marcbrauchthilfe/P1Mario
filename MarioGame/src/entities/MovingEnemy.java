@@ -7,13 +7,8 @@ import utils.Zoom;
 import java.awt.*;
 
 public class MovingEnemy extends Enemy {
-    public static final int ENEMY_HEIGHT = (int) (32 * Zoom.SCALE);
-    public final int ENEMY_WIDTH = (int) (32 * Zoom.SCALE);
-    private final Level level;
-    private final double y;
-    private double x;
+
     private double vx = 1.2 * Zoom.SCALE;
-    private boolean flipX = false;
 
     public MovingEnemy(double x, double y, Level level) {
         super(x, y, level);
@@ -30,16 +25,22 @@ public class MovingEnemy extends Enemy {
         // =========================================
         // 2) ANTI-FALL-KANTEN-ERKENNUNG (nur wenn Boden!)
         // =========================================
-        int frontX = (int) (x + (vx > 0 ? ENEMY_WIDTH + 2 : -2));
-        int belowY = (int) (y + ENEMY_HEIGHT + 2);
+        Rectangle frontFoot = new Rectangle(
+                (int)(x + (vx > 0 ? ENEMY_WIDTH : -4)),
+                (int)(y + ENEMY_HEIGHT),
+                4,           // Breite der Abfrage
+                4            // Höhe der Abfrage
+        );
+
 
         boolean groundAhead = false;
         for (Tile t : level.getSolidTiles()) {
-            if (t.getRect().contains(frontX, belowY)) {
+            if (frontFoot.intersects(t.getRect())) {
                 groundAhead = true;
                 break;
             }
         }
+
 
         if (!groundAhead) {
             // keine Kante → umdrehen
@@ -48,35 +49,31 @@ public class MovingEnemy extends Enemy {
             return;
         }
 
-
         // ==========================
         // 3) HORIZONTALE BEWEGUNG
         // ==========================
-        double nextX = x + vx;
-        Rectangle future = new Rectangle((int) nextX, (int) y, ENEMY_WIDTH, ENEMY_HEIGHT);
+        int sensorX = (int)(x + (vx > 0 ? ENEMY_WIDTH + 1 : -5));
+        int sensorY = (int)y + 4;        // kleine Höhe von oben weg, nicht von der Mitte
+        int sensorH = ENEMY_HEIGHT - 8;  // nicht über den Boden ziehen
 
-        Tile blockingTile = null;
+        Rectangle sideSensor = new Rectangle(sensorX, sensorY, 4, sensorH);
+
+        boolean wallAhead = false;
         for (Tile t : level.getSolidTiles()) {
-            if (future.intersects(t.getRect())) {
-                blockingTile = t;
+            if (sideSensor.intersects(t.getRect())) {
+                wallAhead = true;
                 break;
             }
         }
 
-        if (blockingTile != null) {
-            // HOCHKLETTERN VERHINDERN
-            if (blockingTile.getY() < y + ENEMY_HEIGHT - 4) {
-                vx = -vx;
-                flipX = !flipX;
-                return;
-            }
-            // normale Kollision
-            flipX = !flipX;
+        if (wallAhead) {
+            // Wand → wenden
             vx = -vx;
+            flipX = !flipX;
             return;
         }
 
         // Wenn alles ok → bewegen
-        x = nextX;
+        x += vx;
     }
 }

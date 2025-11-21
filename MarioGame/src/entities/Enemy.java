@@ -13,11 +13,11 @@ import java.io.IOException;
 public class Enemy {
     public static final int ENEMY_HEIGHT = (int) (32 * Zoom.SCALE);
     public final int ENEMY_WIDTH = (int) (32 * Zoom.SCALE);
-    private final Level level;
-    private final double x;
-    private double y;
-    // private double vx = 1.2 * Zoom.SCALE;
-    private BufferedImage sprite = null;
+    protected Level level;
+    protected double x;
+    protected double y;
+    protected BufferedImage sprite = null;
+    protected boolean flipX = false;
 
     public Enemy(double x, double y, Level level) {
         this.x = x;
@@ -68,7 +68,6 @@ public class Enemy {
         int dy = (int) Math.round(y);
 
         if (sprite != null) {
-            boolean flipX = false;
             if (!flipX) {
                 g.drawImage(sprite, dx, dy, ENEMY_WIDTH, ENEMY_HEIGHT, null);
             } else {
