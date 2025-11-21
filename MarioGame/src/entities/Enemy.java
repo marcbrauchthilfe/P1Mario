@@ -13,11 +13,11 @@ import java.io.IOException;
 public class Enemy {
     public static final int ENEMY_HEIGHT = (int) (32 * Zoom.SCALE);
     public final int ENEMY_WIDTH = (int) (32 * Zoom.SCALE);
-    private final Level level;
-    private double x, y;
-    private double vx = 1.2 * Zoom.SCALE;
-    private BufferedImage sprite = null;
-    private boolean flipX = false;
+    protected Level level;
+    protected double x;
+    protected double y;
+    protected BufferedImage sprite = null;
+    protected boolean flipX = false;
 
     public Enemy(double x, double y, Level level) {
         this.x = x;
@@ -26,7 +26,7 @@ public class Enemy {
         try {
             sprite = ImageIO.read(new File("res/Geist_V3.png"));
         } catch (IOException e) {
-            System.err.println("entities.Enemy sprite loading failed.");
+            System.err.println("entities.MovingEnemy sprite loading failed.");
         }
     }
 
@@ -51,61 +51,7 @@ public class Enemy {
         if (!onGround) {
             // frei fallender Gegner → FALLEN
             y = nextY;
-            return; // solange er fällt NICHTS anderes tun
         }
-
-
-        // =========================================
-        // 2) ANTI-FALL-KANTEN-ERKENNUNG (nur wenn Boden!)
-        // =========================================
-        int frontX = (int) (x + (vx > 0 ? ENEMY_WIDTH + 2 : -2));
-        int belowY = (int) (y + ENEMY_HEIGHT + 2);
-
-        boolean groundAhead = false;
-        for (Tile t : level.getSolidTiles()) {
-            if (t.getRect().contains(frontX, belowY)) {
-                groundAhead = true;
-                break;
-            }
-        }
-
-        if (!groundAhead) {
-            // keine Kante → umdrehen
-            vx = -vx;
-            flipX = !flipX;
-            return;
-        }
-
-
-        // ==========================
-        // 3) HORIZONTALE BEWEGUNG
-        // ==========================
-        double nextX = x + vx;
-        Rectangle future = new Rectangle((int) nextX, (int) y, ENEMY_WIDTH, ENEMY_HEIGHT);
-
-        Tile blockingTile = null;
-        for (Tile t : level.getSolidTiles()) {
-            if (future.intersects(t.getRect())) {
-                blockingTile = t;
-                break;
-            }
-        }
-
-        if (blockingTile != null) {
-            // HOCHKLETTERN VERHINDERN
-            if (blockingTile.getY() < y + ENEMY_HEIGHT - 4) {
-                vx = -vx;
-                flipX = !flipX;
-                return;
-            }
-            // normale Kollision
-            flipX = !flipX;
-            vx = -vx;
-            return;
-        }
-
-        // Wenn alles ok → bewegen
-        x = nextX;
     }
 
 
