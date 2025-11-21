@@ -27,7 +27,6 @@ public class MovingEnemy extends Enemy {
     public void update() {
         super.update();
 
-
         // =========================================
         // 2) ANTI-FALL-KANTEN-ERKENNUNG (nur wenn Boden!)
         // =========================================
