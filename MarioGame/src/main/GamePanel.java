@@ -196,10 +196,10 @@ public class GamePanel extends JPanel implements ActionListener {
             }
             if (level.isEndReached(player)) {
                 state = GameState.LEVEL_COMPLETE;
-                if (currentScore > storage.getLevelHighscores()[currentLevelIndex]) {
+                if (currentScore >= storage.getLevelHighscores(currentLevelIndex)) {
                     storage.setLevelHighscores(currentLevelIndex, currentScore);
                 }
-                Storage.setTotalScore(Storage.getTotalScore() + storage.getLevelHighscores()[currentLevelIndex]);
+                storage.updateTotalScore();
             }
         }
         repaint();
