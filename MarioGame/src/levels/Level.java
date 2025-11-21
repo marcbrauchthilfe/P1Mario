@@ -36,7 +36,7 @@ public class Level {
     private final int width;
     private final int height;
     private ArrayList<Tile> solidTiles = new ArrayList<>();
-    private int[][] enemyPositions;
+    private int[][][] enemyPositions;
     private int endX, endY;
 
     // Konstruktor ist jetzt nur für die Level-Dimensionen zuständig
@@ -78,7 +78,7 @@ public class Level {
                 tiles.add(new Tile(x * TILE_SIZE, groundY - (x - 38) * rampStep - rampStep, TILE_SIZE, rampStep, blockTexture));
             }
 
-            level.enemyPositions = new int[][]{{14 * TILE_SIZE, spawnY}, {22 * TILE_SIZE, spawnY}, {30 * TILE_SIZE, spawnY}};
+            level.enemyPositions = new int[][][]{{{14 * TILE_SIZE}, {spawnY}, {1}}, {{22 * TILE_SIZE}, {spawnY}, {1}}, {{30 * TILE_SIZE}, {spawnY}, {1}}};
 
             level.endX = 48 * TILE_SIZE;
             level.endY = groundY - TILE_SIZE;
@@ -105,7 +105,7 @@ public class Level {
             tiles.add(new Tile(38 * TILE_SIZE, groundY - 2 * TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
             tiles.add(new Tile(40 * TILE_SIZE, groundY - TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
 
-            level.enemyPositions = new int[][]{{10 * TILE_SIZE, spawnY}, {17 * TILE_SIZE, spawnY}, {26 * TILE_SIZE, spawnY}, {34 * TILE_SIZE, spawnY}};
+            level.enemyPositions = new int[][][]{{{10 * TILE_SIZE}, {spawnY}, {1}}, {{17 * TILE_SIZE}, {spawnY}, {1}}, {{26 * TILE_SIZE}, {spawnY}, {1}}, {{34 * TILE_SIZE}, {spawnY}, {1}}};
 
             level.endX = 48 * TILE_SIZE;
             level.endY = groundY - TILE_SIZE;
@@ -296,7 +296,7 @@ public class Level {
             tiles.add(new Tile(55 * TILE_SIZE, groundY - 15 * TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
             tiles.add(new Tile(56 * TILE_SIZE, groundY - 15 * TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture)); // flag base
 
-            level.enemyPositions = new int[][]{{13 * TILE_SIZE, groundY - 2 * TILE_SIZE}, {49 * TILE_SIZE, groundY - 6 * TILE_SIZE}};
+            level.enemyPositions = new int[][][]{{{13 * TILE_SIZE}, {groundY - 2 * TILE_SIZE}, {1}}, {{49 * TILE_SIZE}, {groundY - 6 * TILE_SIZE}, {1}}};
             level.endX = 56 * TILE_SIZE;
             level.endY = groundY - 16 * TILE_SIZE;
         }
@@ -329,7 +329,7 @@ public class Level {
             tiles.add(new Tile(27 * TILE_SIZE, groundY - 12 * TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture));
             tiles.add(new Tile(27 * TILE_SIZE + TILE_SIZE, groundY - 12 * TILE_SIZE, TILE_SIZE, TILE_SIZE, blockTexture)); // flag base
 
-            level.enemyPositions = new int[][]{{11 * TILE_SIZE, groundY - 4 * TILE_SIZE}, {23 * TILE_SIZE, groundY - 6 * TILE_SIZE}, {25 * TILE_SIZE, groundY - 3 * TILE_SIZE}};
+            level.enemyPositions = new int[][][]{{{11 * TILE_SIZE}, {groundY - 4 * TILE_SIZE}, {1}}, {{23 * TILE_SIZE}, {groundY - 6 * TILE_SIZE}, {1}}, {{25 * TILE_SIZE}, {groundY - 3 * TILE_SIZE}, {1}}};
             level.endX = 27 * TILE_SIZE + TILE_SIZE;
             level.endY = groundY - 13 * TILE_SIZE;
         }
@@ -405,7 +405,7 @@ public class Level {
         return solidTiles;
     }
 
-    public int[][] getEnemyPositions() {
+    public int[][][] getEnemyPositions() {
         return enemyPositions;
     }
 

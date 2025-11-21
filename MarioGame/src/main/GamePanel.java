@@ -1,6 +1,7 @@
 package main;
 
 import entities.Enemy;
+import entities.MovingEnemy;
 import entities.Player;
 import levels.Level;
 import levels.MovingPlatform;
@@ -27,6 +28,7 @@ public class GamePanel extends JPanel implements ActionListener {
     private boolean left, right;
     private Player player;
     private ArrayList<Enemy> enemies;
+    private ArrayList<MovingEnemy> movingEnemies;
     private Level level;
 
     public GamePanel() {
@@ -152,8 +154,13 @@ public class GamePanel extends JPanel implements ActionListener {
         player.loadSprite("res/player.png");
 
         enemies = new ArrayList<>();
-        for (int[] p : level.getEnemyPositions()) {
-            enemies.add(new Enemy(p[0], p[1], level));
+        movingEnemies = new ArrayList<>();
+        for (int[][] p : level.getEnemyPositions()) {
+            if (p[0][0] == 1) {
+                movingEnemies.add(new MovingEnemy(p[0][0], p[1][0], level));
+            } else {
+                enemies.add(new Enemy(p[0][0], p[1][0], level));
+            }
         }
 
         state = GameState.START_LEVEL;
@@ -179,9 +186,9 @@ public class GamePanel extends JPanel implements ActionListener {
 
             player.update(dt);
 
-            for (Enemy en : new ArrayList<>(enemies)) en.update();
+            for (MovingEnemy en : new ArrayList<>(movingEnemies)) en.update();
 
-            for (Enemy en : new ArrayList<>(enemies)) {
+            for (MovingEnemy en : new ArrayList<>(movingEnemies)) {
                 if (player.getBounds().intersects(en.getBounds())) {
                     if (player.isFalling() && player.getY() < en.getY()) {
                         enemies.remove(en);
@@ -222,7 +229,9 @@ public class GamePanel extends JPanel implements ActionListener {
 
             if (level != null) level.draw(g2, camX);
             if (player != null) player.draw(g2, camX);
+            if (movingEnemies != null) for (MovingEnemy en : movingEnemies) en.draw(g2, camX);
             if (enemies != null) for (Enemy en : enemies) en.draw(g2, camX);
+
 
             drawHUD(g2);
         }
