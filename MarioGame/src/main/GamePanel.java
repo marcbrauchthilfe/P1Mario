@@ -74,6 +74,7 @@ public class GamePanel extends JPanel implements ActionListener {
         InputMap im = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap am = getActionMap();
 
+        /*
         im.put(KeyStroke.getKeyStroke("pressed ENTER"), "enter_pressed");
         am.put("enter_pressed", new AbstractAction() {
             @Override
@@ -81,6 +82,7 @@ public class GamePanel extends JPanel implements ActionListener {
                 menuManager.handleEnter();
             }
         });
+         */
 
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "esc_pressed");
         am.put("esc_pressed", new AbstractAction() {
@@ -160,7 +162,7 @@ public class GamePanel extends JPanel implements ActionListener {
             enemies.add(new Enemy(p[0], p[1], level));
         }
 
-        state = GameState.START_LEVEL_SCREEN;
+        state = GameState.RUNNING;
         if (!timer.isRunning()) timer.start();
     }
 
@@ -178,6 +180,8 @@ public class GamePanel extends JPanel implements ActionListener {
             repaint();
             return;
         }
+
+
         if (state == GameState.RUNNING && player != null) {
             if (left && !right) player.moveLeft();
             else if (right && !left) player.moveRight();

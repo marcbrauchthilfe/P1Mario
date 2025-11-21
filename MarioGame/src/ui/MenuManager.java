@@ -52,11 +52,13 @@ public class MenuManager {
         if (GamePanel.state == GameState.MENU_SCREEN) {
             // Hauptmenü
             if (startBtn.contains(mx, my)) {
+
                 game.loadSelectedLevel(game.getCurrentLevelIndex());
+                game.showLoadingThen(GameState.RUNNING);
             } else if (controlsBtn.contains(mx, my)) {
-                game.setGameState(GameState.CONTROLS_MENU_SCREEN);
+                game.showLoadingThen(GameState.CONTROLS_MENU_SCREEN);
             } else if (levelSelectBtn.contains(mx, my)) {
-                game.setGameState(GameState.LEVEL_SELECTION_SCREEN);
+                game.showLoadingThen(GameState.LEVEL_SELECTION_SCREEN);
             } else if (quitBtn.contains(mx, my)) {
                 System.exit(0);
             }
@@ -64,6 +66,7 @@ public class MenuManager {
             for (int i = 0; i < levelButtons.size(); i++) {
                 if (levelButtons.get(i).contains(mx, my)) {
                     game.loadSelectedLevel(i);
+                    game.showLoadingThen(GameState.RUNNING);
                     return;
                 }
             }
@@ -72,9 +75,10 @@ public class MenuManager {
             if (continueBtn.contains(mx, my)) {
                 int next = game.getCurrentLevelIndex() + 1;
                 if (next >= storage.getTotalNumberOfLevels()) {
-                    game.setGameState(GameState.GAME_OVER_SCREEN);
+                    game.showLoadingThen(GameState.GAME_OVER_SCREEN);
                 } else {
                     game.loadSelectedLevel(next);
+                    game.showLoadingThen(GameState.RUNNING);
                 }
             } else if (menuBtn.contains(mx, my)) {
                 game.showLoadingThen(GameState.MENU_SCREEN);
@@ -88,11 +92,13 @@ public class MenuManager {
         }
     }
 
+    /*
     public void handleEnter() {
         if (GamePanel.state == GameState.START_LEVEL_SCREEN) {
-            game.setGameState(GameState.RUNNING);
+            game.showLoadingThen(GameState.RUNNING);
         }
     }
+     */
 
     public void handleEscape() {
         if (GamePanel.state == GameState.RUNNING || GamePanel.state == GameState.START_LEVEL_SCREEN || GamePanel.state == GameState.LEVEL_COMPLETE_SCREEN || GamePanel.state == GameState.GAME_OVER_SCREEN || GamePanel.state == GameState.LEVEL_SELECTION_SCREEN || GamePanel.state == GameState.CONTROLS_MENU_SCREEN) {
@@ -114,6 +120,7 @@ public class MenuManager {
         } else if (GamePanel.state == GameState.START_LEVEL_SCREEN) {
             drawStartLevel(g);
         }
+
     }
 
     private void drawButton(Graphics2D g, Rectangle rect, String text) {
