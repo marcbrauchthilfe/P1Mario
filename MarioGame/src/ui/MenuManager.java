@@ -146,7 +146,7 @@ public class MenuManager {
         g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
 
         g.setFont(new Font("Arial", Font.BOLD, 48));
-        String title = "SUPER JUMP GAME";
+        String title = "Der Ritter der verlorenen Seelen";
         FontMetrics fm = g.getFontMetrics();
         int titleX = (GamePanel.WIDTH - fm.stringWidth(title)) / 2;
         g.setColor(Color.WHITE);
