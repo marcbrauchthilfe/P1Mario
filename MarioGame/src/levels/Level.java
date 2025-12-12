@@ -12,10 +12,8 @@ import java.util.ArrayList;
 
 public class Level {
     private static final int BASE_TILE_SIZE = 32;
-    // TILE_SIZE wird korrekt mit dem Skalierungsfaktor multipliziert
     public static final int TILE_SIZE = (int) (BASE_TILE_SIZE * Zoom.SCALE);
     public static final int groundY = GamePanel.HEIGHT - TILE_SIZE;
-    // Annahme: PLAYER_HEIGHT ist in entities.Player.java korrekt skaliert
     private static final int PLAYER_HEIGHT = Player.PLAYER_HEIGHT;
     private static BufferedImage groundTexture;
     private static BufferedImage blockTexture;
