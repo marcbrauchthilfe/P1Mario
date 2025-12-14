@@ -23,6 +23,9 @@ public class MenuManager {
     Storage storage;
 
     public MenuManager(GamePanel game) {
+        if (game == null) {
+            throw new IllegalArgumentException("GamePanel darf nicht null sein");
+        }
         this.game = game;
         storage = new Storage();
 
@@ -43,11 +46,16 @@ public class MenuManager {
     }
 
     public void setMousePosition(int x, int y) {
+        if (x < 0 || y < 0 || x > GamePanel.WIDTH || y > GamePanel.HEIGHT) {
+            return; // Maus außerhalb → ignorieren
+        }
         mouseX = x;
         mouseY = y;
     }
 
+
     public void handleMousePressed(int mx, int my) {
+        if (mx < 0 || my < 0) return;
 
         if (GamePanel.state == GameState.MENU_SCREEN) {
             GamePanel.setlives(3);
@@ -95,14 +103,6 @@ public class MenuManager {
             }
         }
     }
-
-    /*
-    public void handleEnter() {
-        if (GamePanel.state == GameState.START_LEVEL_SCREEN) {
-            game.showLoadingThen(GameState.RUNNING);
-        }
-    }
-     */
 
     public void handleEscape() {
         if (GamePanel.state == GameState.RUNNING || GamePanel.state == GameState.START_LEVEL_SCREEN || GamePanel.state == GameState.LEVEL_COMPLETE_SCREEN || GamePanel.state == GameState.GAME_OVER_SCREEN || GamePanel.state == GameState.LEVEL_SELECTION_SCREEN || GamePanel.state == GameState.CONTROLS_MENU_SCREEN) {
@@ -160,7 +160,7 @@ public class MenuManager {
 
         g.setFont(new Font("SansSerif", Font.BOLD, 20));
         g.setColor(Color.YELLOW);
-        g.drawString("Total Score: " + storage.getTotalScore(), 10, 50);
+        g.drawString("Total Score: " + Storage.getTotalScore(), 10, 50);
     }
 
     private void drawLevelSelection(Graphics2D g) {
