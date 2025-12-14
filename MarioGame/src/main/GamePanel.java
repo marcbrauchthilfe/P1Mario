@@ -86,16 +86,6 @@ public class GamePanel extends JPanel implements ActionListener {
         InputMap im = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap am = getActionMap();
 
-        /*
-        im.put(KeyStroke.getKeyStroke("pressed ENTER"), "enter_pressed");
-        am.put("enter_pressed", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                menuManager.handleEnter();
-            }
-        });
-         */
-
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "esc_pressed");
         am.put("esc_pressed", new AbstractAction() {
             @Override
@@ -276,16 +266,6 @@ public class GamePanel extends JPanel implements ActionListener {
         g2.drawString("Lives: " + lives, 10, 40);
         g2.drawString("Level: " + (currentLevelIndex + 1), 700, 20);
     }
-
-//    public void setGameState(GameState newState) {
-//        state = newState;
-//
-//        if (state == GameState.MENU_SCREEN || state == GameState.LEVEL_SELECTION_SCREEN || state == GameState.CONTROLS_MENU_SCREEN) {
-//            if (timer.isRunning()) timer.stop();
-//        } else if (state == GameState.START_LEVEL_SCREEN || state == GameState.RUNNING) {
-//            if (!timer.isRunning()) timer.start();
-//        }
-//    }
 
     public void showLoadingThen(GameState nextState) {
         nextStateAfterLoading = nextState;

@@ -3,10 +3,9 @@ package main;
 public class Storage {
     private static final int totalNumberOfLevels = 8;
     private static int totalScore;
-    private int[] levelHighscores;
+    private final int[] levelHighscores;
 
     public Storage() {
-        totalScore = getTotalScore();
         levelHighscores = new int[totalNumberOfLevels];
     }
 
