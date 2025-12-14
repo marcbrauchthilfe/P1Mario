@@ -57,6 +57,7 @@ public class Player {
     }
 
     public void update(double dt) {
+        if (dt <= 0) return;
         double GRAVITY = 0.6 * Zoom.SCALE;
         double MAX_FALL = 14.0 * Zoom.SCALE;
         double COYOTE_TIME = 0.12;
