@@ -11,11 +11,21 @@ public class Tile {
     protected int x;
 
     public Tile(int x, int y, int w, int h, BufferedImage texture) {
+        if (w <= 0 || h <= 0) {
+            throw new IllegalArgumentException("Tile-Breite und -Höhe müssen > 0 sein");
+        }
+
+        if (x < 0 || y < 0) {
+            throw new IllegalArgumentException(
+                    "Tile-Position darf nicht negativ sein: x=" + x + ", y=" + y
+            );
+        }
+
         this.x = x;
         this.y = y;
         this.w = w;
         this.h = h;
-        this.texture = texture;
+        this.texture = texture; // null ist erlaubt
     }
 
     public void draw(Graphics2D g, int camX) {
