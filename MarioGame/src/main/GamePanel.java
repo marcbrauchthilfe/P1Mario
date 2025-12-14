@@ -56,6 +56,12 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public static void setlives(int lives) {
+        if (lives < 0) {
+            throw new IllegalArgumentException("Lives dürfen nicht negativ sein: " + lives);
+        }
+        if (lives > 3) {
+            throw new IllegalArgumentException("Lives zu hoch: " + lives);
+        }
         GamePanel.lives = lives;
     }
 
@@ -153,6 +159,14 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public void loadSelectedLevel(int index) {
+            if (index < 0) {
+                throw new IllegalArgumentException("Levelindex darf nicht negativ sein: " + index);
+            }
+
+            Level loadedLevel = Level.createSampleLevel(index);
+            if (loadedLevel == null) {
+                throw new IllegalStateException("Level konnte nicht geladen werden: " + index);
+            }
         currentLevelIndex = index;
         level = Level.createSampleLevel(index);
 
@@ -292,10 +306,15 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public void setCurrentScore(int currentScore) {
+        if (currentScore < 0) {
+            throw new IllegalArgumentException("Score darf nicht negativ sein");
+        }
         this.currentScore = currentScore;
     }
 
     private void handleEnemyCollision(Enemy en) {
+        if (en == null || player == null) return;
+
         if (!player.getBounds().intersects(en.getBounds())) return;
 
         // Spieler springt von oben auf den Gegner
@@ -313,6 +332,8 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     private void removeEnemy(Enemy en) {
+        if (en == null) return;
+
         enemies.remove(en);
         movingEnemies.remove(en);
     }
