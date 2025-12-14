@@ -15,6 +15,9 @@ public class Storage {
     }
 
     public static void setTotalScore(int totalScore) {
+        if (totalScore < 0) {
+            throw new IllegalArgumentException("totalScore darf nicht negativ sein: " + totalScore);
+        }
         Storage.totalScore = totalScore;
     }
 
@@ -23,7 +26,11 @@ public class Storage {
     }
 
     public void setLevelHighscores(int levelIndex, int levelScore) {
-        this.levelHighscores[levelIndex] = levelScore;
+        if (levelScore < 0) {
+            throw new IllegalArgumentException("Levelscore darf nicht negativ sein: " + levelScore);
+        }
+
+        levelHighscores[levelIndex] = levelScore;
     }
 
     public int getTotalNumberOfLevels() {
