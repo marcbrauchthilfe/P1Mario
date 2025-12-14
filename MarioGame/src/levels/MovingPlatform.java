@@ -14,6 +14,9 @@ public class MovingPlatform extends Tile {
 
     public MovingPlatform(double x, double y, double width, double height, double endX, double endY, double speed, BufferedImage texture) {
         super((int) x, (int) y, (int) width, (int) height, texture);
+        if (x == endX && y == endY) {
+            throw new IllegalArgumentException("Start- und Endpunkt dürfen nicht identisch sein");
+        }
         this.x = x;
         this.y = y;
         this.w = width;
@@ -26,6 +29,7 @@ public class MovingPlatform extends Tile {
     }
 
     public void update(double dt) {
+        if (dt <= 0) return;
         // Vektor von Start zu End
         double dx = endX - startX;
         double dy = endY - startY;
