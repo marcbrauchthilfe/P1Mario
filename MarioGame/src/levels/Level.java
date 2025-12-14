@@ -43,6 +43,7 @@ public class Level {
     }
 
     public static Level createSampleLevel(int index) {
+        if (index < 0 || index >= GamePanel.WIDTH) { return null; }
         // Level-Dimensionen skalieren
         Level level = new Level((int) (3000 * Zoom.SCALE), (int) (600 * Zoom.SCALE));
         ArrayList<Tile> tiles = new ArrayList<>();
@@ -337,6 +338,7 @@ public class Level {
     }
 
     public boolean isEndReached(Player p) {
+        if(p == null) return false;
         // Flaggen-Hitbox skaliert
         Rectangle flagRect = new Rectangle(endX, (int) (endY - (150 * Zoom.SCALE)), (int) (40 * Zoom.SCALE), (int) (200 * Zoom.SCALE));
         return p.getBounds().intersects(flagRect);
